@@ -1,0 +1,45 @@
+
+.pfp {
+    border-radius: 100vh;
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 20vh;
+}
+
+.pfp {
+    display: flex;
+    justify-content: center;
+    margin-top: 2vh;
+}
+
+.name {
+    display: flex;
+    justify-content: center;
+    padding-top: 1vh;
+    font-size: 25px;
+}
+
+.info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 5vh;
+}
+
+.date-day {
+    display: flex;
+    gap: 4px;
+    font-size: 20px;
+}
+
+.time {
+    font-size: 30px;
+    font-weight: 200;
+}
+
+
