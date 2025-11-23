@@ -1,0 +1,55 @@
+* {
+    scrollbar-width: none;
+}
+
+.desktop {
+    height: 99vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-image: url("../assets/bg-arch.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 200px;
+}
+.taskbar {
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin-top: auto;
+    align-items: center;
+    background-color: #000710c1;
+    padding: 10px;
+    width: 30vw;
+    border-radius: 20px;
+}
+
+
+
+
+.firefox {
+    height: 50px;
+}
+
+
+.terminal {
+    height: 30px;
+}
+
+.file {
+    padding-left: 20px;
+    height: 40px;
+}
+
+.arch {
+    height: 30px;
+}
+
+.taskbar ul {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    gap: 20px;
+    align-items: center;
+}

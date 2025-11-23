@@ -1,6 +1,7 @@
 
 .pfp {
     border-radius: 100vh;
+    height: 20vh; 
 }
 
 .header-text {
@@ -18,9 +19,10 @@
 }
 
 .name {
+
     display: flex;
     justify-content: center;
-    padding-top: 1vh;
+    padding-top: 3vh;
     font-size: 25px;
 }
 

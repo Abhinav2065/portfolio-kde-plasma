@@ -20,7 +20,7 @@ const Login = () => {
         <h1>Hi! I am</h1>
       </div>
       <div className="pfp">
-        <Link to="/">
+        <Link to="/desktop">
           <img src={pfp} height="100vh" className='pfp'/>
         </Link>
       </div>
