@@ -53,3 +53,48 @@
     gap: 20px;
     align-items: center;
 }
+
+
+
+.notepad {
+   padding-left: 30vw; 
+    height: 800px;
+    width: 600px;
+}
+
+
+.notepad-header {
+    display: flex;
+    gap: 30px;
+    justify-content: space-between;
+    background-color: #000710c1;
+}
+
+
+
+textarea {
+    font-size: 16px;
+    color: black;
+}
+
+
+.start-menu {
+    height: 400px;
+    width: 800px;
+    background-color: rgba(0, 0, 0, 0.4);
+    margin-top: 200px; 
+}
+
+.start-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.start-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+}

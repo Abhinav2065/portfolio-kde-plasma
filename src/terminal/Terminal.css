@@ -1,0 +1,41 @@
+.terminal-window {
+    width: 600px;
+    height: 400px;
+    position: absolute;
+    top: 50px;
+    background-color: #000;
+    border: 1px solid #403f3f;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+
+}
+
+
+.terminal-header {
+    background-color: #403f3f;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: move;
+    padding: 8px 12px;
+}
+
+.terminal-title {
+    font-weight: bold;
+}
+
+
+.terminal-body .xterm {
+    width: 100%;
+    height: 100%;
+}
+
+
+.xterm-screen {
+    width: 100% !important;
+}
+
+.terminal-body:focus {
+    outline: none;
+}

@@ -1,0 +1,49 @@
+.icon {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    height: auto;
+    padding: 10px;
+    cursor: move;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    gap: 15px;
+    width: 60px;
+
+}
+
+.icon:hover {
+    border: 1px dashed #ccc;
+    background-color: rgba(255,255,255,0.1);
+}
+
+.icon:active {
+    cursor: grabbing;
+}
+
+
+
+.icon-img {
+    height: 40px;
+    width: 40px;
+    margin-bottom: 0;
+    pointer-events: none;
+}
+
+
+.icon p{
+    margin: 0;
+    pointer-events: none;
+}
+
+.icons {
+    display: grid;
+    width: 100vw;
+    gap: 20px;
+    align-content: start;
+
+    padding: 20px;
+    grid-template-columns: 1fr;
+    padding-left: 80px;
+
+}
