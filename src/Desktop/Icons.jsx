@@ -4,9 +4,9 @@ import Notepad from './Notepad';
 
 const Icons = () => {
   const [icons, setIcons] = useState([
-    {id: 1, name:'About Me', top:0, left: 0, content: 'This is the content of the About Me Section'},
+    {id: 1, name:'About Me', top:0, left: 0, content: 'Hi! My name is Abhinav Siluwal, I am 17 years old high school student and STEM enthusiast from Kathmandu, Nepal. A 12th grader, Builder, President of STEM club in my high school'},
     
-    {id: 2, name:'What is this?', top:0, left: 0, content: 'This is the content of this section....'},
+    {id: 2, name:'What is this?', top:0, left: 0, content: 'This is a Projec That i have been meaning to make but not i am finally starting, its a WIP but i hope to finish it soon and and a lot of stuff here.'},
   ]);
 
   const [draggedItem, setDraggedItem] = useState(null);

@@ -78,7 +78,6 @@ const Terminal = ({ onClose }) => {
 
   const handleTerminalClick = useCallback((e) => {
 
-    e.stopPropagation();
 
     if (instance) {
       instance.focus();
