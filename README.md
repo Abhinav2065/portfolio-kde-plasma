@@ -8,7 +8,6 @@ This Project is trying to simulate or replicate a Linux Based Desktop Environmen
 It has basic things that an linux installation has like a browser, terminal, start menu, taskbar, etc.
 A non technical person could easily mistake this site for an acutal desktop if the tab is in fullscreen.
 
-
 ### Tech Stack Used
 
 This Project is made using react+vite, with JS.
@@ -67,8 +66,7 @@ Check out the live demo at : https://portfolio-kde-plasma.vercel.app/
 - Node.js (version 14+)
 - npm or yarn
 
-Local Development
-bash
+### Local Development
 
 #### Clone the repository
 git clone https://github.com/Abhinav2065/portfolio-kde-plasma
@@ -92,7 +90,7 @@ abhinavsl511@gmail.com
 
 
 
-⭐ Star this repo if you found it interesting!
+## ⭐ Star this repo if you found it interesting!
 
 
 
