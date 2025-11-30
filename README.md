@@ -1,45 +1,100 @@
-# Linux Simulation Portfolio
+# Linux Desktop Enviroment Inspired Portfolio Website
+
+This is an portfolio website that shows anyone who visits my portfolio about the love of linux by me.
+
+## Project Details
+
+This Project is trying to simulate or replicate a Linux Based Desktop Environment Linux Kde Plasma. 
+It has basic things that an linux installation has like a browser, terminal, start menu, taskbar, etc.
+A non technical person could easily mistake this site for an acutal desktop if the tab is in fullscreen.
 
 
-This is a Website that Simulates Linux GUI and a Portfolio website, it is a WIP so there are not a lot of things here.
+### Tech Stack Used
 
-This is made using React+Vite.
+This Project is made using react+vite, with JS.
+There is not any extra library used for things like the terminal or any other features of the OS.
+
+### Rough Idea of how things work
+
+So every "Apps" are in a different jsx and when you click on them then a function will be triggred which will set a variable corrosponding to the app to "true" or on. Then that will make that app show up on the desktop due to the conditional rendering which checks for these "true" values. Then that "App" will pop up on the screen, it does not take extra space due to position:fixed in the css. Then there is a onClose prop passed to the jsx which in case of clicking the cross button on activate which will turn the initial "true" value to "false" and due to conditional rendering the app will stop rendering. 
+
+### Features
+
+#### Desktop Environment
+- Full Desktop Environment Simulation
+- A working Taskbar 
+- Semi Working Start Menu (the apps cannot be searched and apps cannot be opened from it yet)
+- theme system (this is in the settings icon, it is half working)
+
+#### Applications
+- Terminal
+  A working terminal with different commands like
+    - help (displays all command and its use )
+    - clear (clears the terminal)
+    - date (shows the date and the time)
+    - echo (repeats the text after that command)
+    - ls (displays all things on that directory)
+    - pwd (shows your location)
+    - fastfetch (shows system information)
+
+- Browser
+    A working Browser is features with
+        - A home page
+        - URL search bar
+        - ability to navigate to previous and forward pages
+        - Home Page 
+        - close browser button
+
+- Notepad
+    A notepad app that i am using to show my info
+
+- Settings
+    It is kinda WIP
+
+#### Notifications
+
+You can show Notifications like in the login page if you do not click on the picture.
 
 
-# What Works?
-1. The Login page thing works where if you click on the picture then you will get redirected to the desktop.
-2. Desktop: So the basic version of the desktop works, the wallpaper looks decent imo. 
-3. Desktop Icons: I have added 2 desktop icons both are kinda like notepad things so if you click on them you can see information as well or you can change it as well but it is not saved tho cuz i don't think it is a good idea to let ppl change stuff at a portfolio website.
-4. Taskbar: So in the Taskbar, while it is not complete i have made the Start Button(first button th Arch logo) kinda work, it does not have a lot but it works, i will add stuff to that later.
+## Live Demo
+
+Check out the live demo at : https://portfolio-kde-plasma.vercel.app/
 
 
-# What Does not Work:
-1. Terminal: While it does show up when you click on it, you cannot type or do anything. I tried to implement terminal first but it took too long to debug and i just kinda got bored, i will work on the terminal in the future. 
-2. Browser: I do have some code for browser but do not have time to implement it yet.
-3. File Manager: Yeah i have not even started this one...
+## Installation and Setup
+
+### Prerequisites
+- Node.js (version 14+)
+- npm or yarn
+
+Local Development
+bash
+
+# Clone the repository
+git clone https://github.com/Abhinav2065/portfolio-kde-plasma
+
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+
+
+## Author
+
+Abhinav Siluwal
+abhinavsl511@gmail.com
+
+
+
+⭐ Star this repo if you found it interesting!
 
 
 
 
-# How does the Login Thing Work?
-
-So i have a localstorage that is turned on when you click on the picture at first then you can just use desktop else it will redirect you to the login screen thing.
-
-# How does the Desktop Work?
-
-So the wallpaper is just a background image edited to look like that.
-
-there are multiple components no the Desktop like the taskbar and icons which uses simple css to appear like they are in a desktop.
-
-# How does the notepad work?
-
-It checks for double click and if you double clicked then a use state will set its value to the value of the icon that you clicked, so its title, contents, etc and we check if there are any of these loaded things and if it is then it will appear and once you click on the close button then the use state variable will clear the icon datas so that other icon may load and your screen may be clear.
-
-
-# What is Left to add?
-
-1. A complete Browser 
-2. A working Terminal with a lot of features like fastfetch or neofetch, basic commands for making files, maybe vim even? uh add like mkdir and stuff like that.
-3. File Manager (i know this one is gonna be really hard)
-4. And some more icons on the desktop.
-
+(This Project is a WIP. Features and Documentation are regularly updated)
