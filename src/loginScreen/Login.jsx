@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from 'react'
 import './Login.css'
 import pfp from '../assets/pfp.png'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import Notification from '../DesktopFeatures/Notification'
+import archLinuxLoginPic from '../assets/archLinuxLoginAnimation.png'
 
 const Login = () => {
 
 
   const [pfpClick, setPfpClick] = useState(false);
   const [notification, setNotification] = useState(null); 
+  const [showLoginAnimation, setShowLoginAnimation] = useState(false);
+  const [progress, setProgress] = useState(0);
+
+  const navigate = useNavigate();
 
   const today = new Date();
   const dateString = today.toLocaleDateString();
@@ -32,7 +37,9 @@ const Login = () => {
  
   }
 
-  const handlePfpClick = () => {
+  const handlePfpClick = (e) => {
+    e.preventDefault();
+    setShowLoginAnimation(true);
     setPfpClick(true);
   }
 
@@ -40,7 +47,7 @@ const Login = () => {
     setNotification(null);
   }
 
-
+// Dismiss the Notification after 2 second
   useEffect(() => {
     if (notification) {
       const timer = setTimeout(() => {
@@ -51,6 +58,35 @@ const Login = () => {
       return () => clearTimeout(timer);
     }
   }, [notification]);
+
+
+  useEffect(() => {
+    if (showLoginAnimation) {
+      const duration = 1500;
+      const interval = 10;
+      const steps = duration/interval;
+      const increment = 100 / steps;
+
+
+      let currentProgress = 0;
+
+      const progressTimer = setInterval(() => {
+        currentProgress += increment;
+        setProgress(Math.min(currentProgress, 100));
+
+
+        if (currentProgress >= 100) {
+          clearInterval(progressTimer);
+
+          setTimeout(() => {
+            navigate('/desktop');
+          }, 200);
+        }
+      })
+    }
+  }, [showLoginAnimation, navigate]);
+
+
 
   return (
     <div onClick={handleClick} class="login-screen">
@@ -63,14 +99,24 @@ const Login = () => {
         
         />
       )}      
+      
+      {showLoginAnimation && (
+        <div className="login-animation-overlay">
+          <div className="arch-logo-container">
+            <div className="arch-logo"><img src={archLinuxLoginPic} /></div>
+          </div>
+          <div className="login-status-bar">
+            <div className="login-progress-bar" style={{width: `${progress}`}}></div>
+          </div>
+        </div>
+      )}
+
 
       <div className="header-text">
         <h1>Hi! I am</h1>
       </div>
       <div className="pfp-container">
-        <Link to="/desktop" onClick={handlePfpClick}> 
-          <img src={pfp} height="100vh" className='pfp'/>
-        </Link>
+          <img src={pfp} height="100vh" className='pfp' onClick={handlePfpClick}/>
       </div>
       
       <div className="name">
