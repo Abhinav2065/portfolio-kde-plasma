@@ -12,6 +12,8 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  background-color: #001c3b;
-  color: rgb(213, 212, 212);
+  /* background-color: #001c3b; */
+  /* color: rgb(213, 212, 212); */
+  background-color: white;
+  columns: black;
 }
