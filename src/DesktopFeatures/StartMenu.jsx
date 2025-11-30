@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Notification from './Notification'
+import './Features.css'
 
 const StartMenu = ({onClick}) => {
     const [notification, setNotification] = useState(null);

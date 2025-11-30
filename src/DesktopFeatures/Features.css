@@ -195,3 +195,9 @@
     }
 }
 
+
+.start-window {
+    position: absolute;
+    bottom: 80px;
+    
+}
