@@ -20,7 +20,9 @@ const Desktop = () => {
   const [showStartMenu, setShowStartMenu] = useState(false);
   const [showFirefox, setShowFirefox] = useState(false);
   const [startClick, setStartClick] = useState(false);
+  
 
+  
   const handleTerminalClose = () => {
     console.log('Closing The Terminal');
     setShowTerminal(false);
