@@ -1,4 +1,10 @@
 
+.login-screen {
+    min-height: 100vh;
+    cursor: pointer;
+}
+
+
 .pfp {
     border-radius: 100vh;
     height: 20vh; 
@@ -12,7 +18,7 @@
     padding-top: 20vh;
 }
 
-.pfp {
+.pfp-container {
     display: flex;
     justify-content: center;
     margin-top: 2vh;
