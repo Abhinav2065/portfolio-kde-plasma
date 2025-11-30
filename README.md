@@ -70,17 +70,17 @@ Check out the live demo at : https://portfolio-kde-plasma.vercel.app/
 Local Development
 bash
 
-# Clone the repository
+#### Clone the repository
 git clone https://github.com/Abhinav2065/portfolio-kde-plasma
 
 
-# Install dependencies
+#### Install dependencies
 npm install
 
-# Start development server
+#### Start development server
 npm run dev
 
-# Build for production
+#### Build for production
 npm run build
 
 
