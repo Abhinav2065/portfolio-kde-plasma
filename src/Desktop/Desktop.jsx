@@ -8,8 +8,8 @@ import arch from '../assets/arch.png'
 import Terminal from '../terminal/Terminal'
 import Icons from './Icons'
 import './Icons.css'
-import StartMenu from './StartMenu'
 import Firefox from './Firefox'
+import StartMenu from '../DesktopFeatures/StartMenu'
 
 
 
@@ -19,7 +19,7 @@ const Desktop = () => {
  const [showterminal, setShowTerminal] = useState(false);
   const [showStartMenu, setShowStartMenu] = useState(false);
   const [showFirefox, setShowFirefox] = useState(false);
-
+  const [startClick, setStartClick] = useState(false);
 
   const handleTerminalClose = () => {
     console.log('Closing The Terminal');
@@ -56,15 +56,17 @@ const Desktop = () => {
     setShowStartMenu(true);
   }
 
-  const handleCloseStartButtonClick = () => {
-    setShowStartMenu(false);
-  }
 
   const handleDesktopClick = () => {
-    if (showStartMenu) {
+    if (showStartMenu && !startClick) {
       setShowStartMenu(false);
     }
   }
+
+  const handleStartMenuClick = (e) => {
+    e.stopPropagation();
+  }
+
 
   return (
     <div>
@@ -75,8 +77,7 @@ const Desktop = () => {
 
           {showStartMenu && (
             <StartMenu 
-              onClose={handleCloseStartButtonClick}
-            
+              onClick={handleStartMenuClick} 
             />
           )} 
 

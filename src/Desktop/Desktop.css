@@ -78,23 +78,3 @@ textarea {
 }
 
 
-.start-menu {
-    height: 400px;
-    width: 800px;
-    background-color: rgba(0, 0, 0, 0.4);
-    margin-top: 200px; 
-}
-
-.start-title {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-
-.start-content {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 60px;
-}
