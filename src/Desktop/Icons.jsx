@@ -4,9 +4,10 @@ import Notepad from './Notepad';
 
 const Icons = () => {
   const [icons, setIcons] = useState([
-    {id: 1, name:'About Me', top:0, left: 0, content: 'Hi! My name is Abhinav Siluwal, I am 17 years old high school student and STEM enthusiast from Kathmandu, Nepal. A 12th grader, Builder, President of STEM club in my high school'},
+    {id: 1, name:'About Me', top:0, left: 0, content: 'Hi! My name is Abhinav Siluwal, I am 17 years old high school student and STEM enthusiast from Kathmandu, Nepal. I am currently in 12th grade on the NEB curriculum. I love to code and build robots and mess with electronics. I want to study Electrial Engineering after i complete my high school while learning to code on my own. I am currently mainly learning fontend development and C/C++ for working with microcontrollers as well as learning some Python for some of my projects. Also I have been using Linux for 4 years and daily driving linux for 2 and a half years. I currenly use Arch Linux with Hyprland and i really enjoy using linux, customizing it and editing it to make it just the way I like it.'},
     
-    {id: 2, name:'What is this?', top:0, left: 0, content: 'This is a Projec That i have been meaning to make but not i am finally starting, its a WIP but i hope to finish it soon and and a lot of stuff here.'},
+    {id: 2, name:'What is this?', top:0, left: 0, content: 'This is me trying to replicate a Linux desktop environment like kde plasma. So this is like a notepad app on this "OS". \n So this website has a bunch of things that works like the terminal, it has some of the commands that work which you can see by typing "help" on the terminal. \n Also the browser works (depends on the browser), some of the browser lets you acess different website using iframe but some do not so its kinda based on browser but the home page is working for me (i use firefox). I tried to get google but it did not let me load it so i used ask.com (please do not judege me, i do not actully use ask.com)'},
+    {id:3, name:'Links', top:0, left:3, content:'My github: https://github.com/Abhinav2065,\nMy LinkedIn: https://www.linkedin.com/in/abhinavsl/,\nMy Email: abhinavsl511@gmail.com,\ninstagram: silwalabhinav (only add me if you know me irl)'}
   ]);
 
   const [draggedItem, setDraggedItem] = useState(null);
