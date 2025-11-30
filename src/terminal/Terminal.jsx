@@ -59,21 +59,48 @@ const Terminal = ({onClose}) => {
 
   switch (trimmedCmd.toLowerCase()) {
     case 'help':
-      response = `Available Commands:
-      - help: Show this Message
-      - clear: Clear the Terminal
-      - date: Show Current Date and time
-      - echo [text]: Echo Back the provided text`;
+      response = `Available Commands:\n
+      - help: Show this Message\n
+      - clear: Clear the Terminal\n
+      - date: Show Current Date and time\n
+      - echo [text]: Echo Back the provided text
+      - ls: display all iteams in the directory that you are in \n
+      - pwd: shows your location\n
+      - fastfetch: information about this OS`;
       break;
 
       case 'clear':
         setOutput([{type: 'prompt'}]);
         return;
 
+      case 'ls':
+        response = `Desktop Documents Downloads Music Pictures Videos`;
+        break;
+
+      case 'pwd':
+        response = `/home/ablag`;
+        break;
+      
       case 'date':
         response = new Date().toString();
         break;
 
+      case 'fastfetch':
+        response = `               
+┌──────────────────────────────────────┐ 
+ OS: Arch Linux ( Arch BTW )
+ Host: Latitude 3420 
+ Kernel: 6.17.8-arch1-1 
+ Uptime: 43 hours, 36 mins 
+ Packages: 1325 (pacman) 
+ Shell: bash 5.3.3 
+ Resolution: 1920x1080 
+ DE: KDE Plasma 
+ Terminal: meow meow 
+└──────────────────────────────────────┘ 
+                 
+──────────────────────────── `
+        break;
       case '':
         setOutput(prev => [...prev, {type: 'prompt'}]);
         return;
@@ -101,6 +128,7 @@ const Terminal = ({onClose}) => {
 
   return (
       <div className="terminal-window" onClick={handleTerminalClick}>
+
           <div className="terminal-header">
             <div className="terminal-title">Terminal</div>
             <div className="terminal-close" onClick={handleCloseClick}>
@@ -108,27 +136,35 @@ const Terminal = ({onClose}) => {
             </div>
           </div>
           <div className="terminal-body" ref={terminalRef}>
+            <pre>
             {output.map((item, index) => (
               <div key={index} className={`terminal-line ${item.type}`}>
-                {item.type === 'prompt' ? (
-                  <div className="prompt-line">
-                    <span className="prompt">$</span>
-                    {index === output.length - 1 ? (
-                      <input type="text" className="terminal-input" ref={inputRef}  value={input} onChange={handleInputChange} onKeyDown={handleKeyDown} autoFocus/>
-
-                    ): null}
-                  </div>
-
-                ): (
-                  <div className="output-content">
-                    {item.type === 'command' && <span className='prompt'>$</span>}
-                    {item.content}
-                  </div>
-                )}
+                <div className="output-content">
+                  {item.content}
+                </div>
               </div>
             ))}
+
+
+            <div className="terminal-line prompt">
+              <div className="prompt-line">
+                <span className="prompt">$</span>
+                <input 
+                type="text"
+                className='terminal-input'
+                ref={inputRef}
+                value={input}
+                onChange={handleInputChange}
+                onKeyDown={handleKeyDown}
+                autoFocus
+                />
+
+              </div>
+            </div>
+            </pre>
           </div>
           <div ref={outputEndRef}/>
+
       </div>
   )
 }
