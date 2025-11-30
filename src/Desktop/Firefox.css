@@ -1,0 +1,142 @@
+.firefox-window {
+    width: 80vw;
+    height: 80vh;
+    position: fixed;
+    background-color: rgb(55, 55, 55);
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    top: 10%;
+    left: 10%;
+    z-index: 1000;
+}
+
+
+.firefox-header {
+    background-color: black;
+    border-bottom: 1px solid rgb(108, 107, 107);
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+
+.header-icons {
+    display: flex;
+    gap: 8px;
+}
+
+
+.header-icon {
+    background: none;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+.header-icon:hover {
+    background-color: rgb(92, 92, 92);
+}
+
+
+.url-bar-section {
+    flex: 1;
+    margin: 0 12px;
+}
+
+
+.url-form {
+    width: 100%;
+}
+
+.url-bar {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    border: 1px solid rgb(93, 93, 93);
+    border-radius: 20px;
+    padding: 4px 12px;
+    width: 80%;
+}
+
+.firefox-header-icons-left-side {
+    display: flex;
+    gap: 20px;
+    cursor: pointer;    
+}
+
+
+.lock-icon {
+    margin-right: 8px;
+    font-size: 12px;
+}
+
+
+.url-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 6px 0;
+    font-size: 14px;
+}
+
+
+.go-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+
+.go-button:hover {
+    background-color: #f0f0f0;
+}
+
+
+.firefox-header-icons-right {
+    display: flex;
+    gap: 8px;
+}
+
+
+.menu-icon, .close-icon {
+    background: none;
+    border: none;
+    padding: 6px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+
+.menu-icon:hover, .close-icon:hover {
+    background-color: #e0e0e0;
+}
+
+
+.close-icon:hover {
+    background-color: #ff5f56;
+    color: white;
+}
+
+
+.firefox-content {
+    flex: 1;
+    border: none;
+}
+
+
+.browser-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
+
+

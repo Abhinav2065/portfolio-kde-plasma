@@ -18,6 +18,8 @@ const Desktop = () => {
 
  const [showterminal, setShowTerminal] = useState(false);
   const [showStartMenu, setShowStartMenu] = useState(false);
+  const [showFirefox, setShowFirefox] = useState(false);
+
 
   const handleTerminalClose = () => {
     console.log('Closing The Terminal');
@@ -31,6 +33,21 @@ const Desktop = () => {
     }
     console.log('Opening The Terminal');
     setShowTerminal(true);
+  }
+
+
+  const handleFirefoxClose = () => {
+    console.log('Closing Firefox');
+    setShowFirefox(false);
+  }
+
+  const handleFirefoxOpen = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    console.log('Opening Firefox');
+    setShowFirefox(true);
   }
 
 
@@ -53,7 +70,7 @@ const Desktop = () => {
     <div>
        <div className="desktop" onClick={handleDesktopClick}>
             {showterminal && <Terminal onClose={handleTerminalClose}/>}
-
+            {showFirefox && <Firefox onClose={handleFirefoxClose} />}
            <Icons></Icons> 
 
           {showStartMenu && (
@@ -66,7 +83,7 @@ const Desktop = () => {
             <div className="taskbar">
                 <ul>
                <li><Link><img src={arch} className='arch'  onClick={handleStartButtonClick}/></Link></li>
-                    <li ><Link><img src={firefox} alt="" className='firefox' /></Link></li>
+                    <li ><Link onClick={handleFirefoxOpen}><img src={firefox} alt="" className='firefox' /></Link></li>
                     <li><Link onClick={handleTerminalOpen} ><img src={terminal} alt="" className='terminal' /></Link></li>
                     <li><Link><img src={file} alt="" className='file' /></Link></li>
                 </ul>

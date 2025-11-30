@@ -1,53 +1,76 @@
 import React, { useState } from 'react'
+import './Firefox.css'
 
-const Firefox = () => {
+const Firefox = ({onClose}) => {
 
-    const [url, setUrl] = useState("https://google.com"); // Initial Url (the page that shows up when u first open the browser)
+    const [url, setUrl] = useState("https://www.ask.com/"); // Initial Url (the page that shows up when u first open the browser)
+    const [currentUrl, setCurrentUrl] = useState("https://www.ask.com/");
 
+    const handleUrlSubmit = (e) => {
+        e.preventDefault();
 
-    const handleUrlChange = (newUrl) => {
-        setUrl(newUrl);
+        let newUrl = url;
+        if (!newUrl.startsWith('https://') && !newUrl.startsWith('https://')) {
+            newUrl = "https://" + newUrl;
+        }
+        setCurrentUrl(newUrl);
+    }
+
+    const handleUrlChange = (e) => {
+        setUrl(e.target.value);
+    }
+
+    const handleRefresh = () => {
+        setCurrentUrl(currentUrl + '?refresh=' + Math.random());
+    }
+
+    const handleHome = () => {
+        setUrl("https://www.ask.com/");
+        setCurrentUrl("https://www.ask.com/");
     }
 
 
   return (
     <div>
-        <div className="firefox">
+        <div className="firefox-window">
            <div className="firefox-header">
                 <div className="header-icons">
-                    <div className="header-icon"> &larr</div>
-                    <div className="header-icon"> &rarr</div>
-                    <div className="btn btn-default btn-sm"><i className='material-icon'>refresh</i></div> 
-                    <div className="home-icon">Home</div>
+                    <div className="header-icon" onClick={() => window.history.back()}> &larr;</div>
+                    <div className="header-icon" onClick={() => window.history.forward()}> &rarr;</div>
+                    <div className="btn btn-default btn-sm" onClick={handleRefresh}><i className='material-icon'>⟳</i></div> 
+                    <div className="home-icon" onClick={handleHome}>⌂</div>
                 </div>
 
                 <div className="url-bar-section">
-                    <div className="url-bar-icons">
-                        <div className="lock-icon"></div>
-                        <div className="url-bar">
-                            <input type="text" onSubmit={handleUrlChange}/>
-                        </div>
+                    <form onSubmit={handleUrlSubmit} className="url-form">
+                    <div className="url-bar">
+                        <div className="lock-icon">🔒</div>
+                        <input 
+                            type="text" 
+                            onSubmit={handleUrlChange}
+                            value={url}
+                            className='url-input'
+                            placeholder='Enter Url'
+                        />
+                        <button type='submit' className="go-button">Go</button>
                     </div>
+                    </form>
                 </div>
 
                 <div className="firefox-header-icons-left-side">
-                    <div className="hamberg-icon"></div>
-                    <div className="cross">x</div>
+                    <div className="hamberg-icon">☰</div>
+                    <div className="cross-icon" onClick={onClose}>X</div>
                 </div>
             </div> 
 
-            <div className="sidebar">
-                <div className="sidebar-icons">
-                    <div className="sidebar-icon">
-                        Home Icon 
-                    </div>
 
-                    {/* Other Icons go here, I will add a loop for the tabs on the sidebar later */}
-                </div>
-            </div>
-
-            <div className="main-page">
-                <iframe src={url} frameborder="0"></iframe> {/* This loads the website */}
+            <div className="firefox-content">
+                <iframe 
+                    src={url} 
+                    title='Browser'
+                    className='browser-frame'
+                    >
+                </iframe> {/* This loads the website */}
             </div>
         </div>
     </div>
