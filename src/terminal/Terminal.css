@@ -1,41 +1,96 @@
 .terminal-window {
-    width: 600px;
     height: 400px;
-    position: absolute;
-    top: 50px;
-    background-color: #000;
-    border: 1px solid #403f3f;
-    border-radius: 4px;
+    width: 600px;
+    background-color: rgba(42, 42, 42, 0.869);
+    border-radius: 5px;
     display: flex;
     flex-direction: column;
-
+    overflow: hidden;
+    position: fixed;
 }
 
 
 .terminal-header {
-    background-color: #403f3f;
+    background-color: rgba(0, 0, 0, 0.869);
+    padding: 8px 12px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    cursor: move;
-    padding: 8px 12px;
+    border-bottom: 1px solid #555;
 }
 
 .terminal-title {
+    color: #ddd;
     font-weight: bold;
+    font-size: 14px;
+}
+
+.terminal-close button {
+    background: none;
+    border: none;
+    color: #ddd;
+    cursor: pointer;
+    font-size: 16px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 
-.terminal-body .xterm {
-    width: 100%;
-    height: 100%;
+.terminal-close button:hover {
+    background-color: #8f8f8f;
+    color: white;
 }
 
 
-.xterm-screen {
-    width: 100% !important;
+.terminal-body {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
+    color: #f0f0f0;
+    font-size: 14px;
+    line-height: 1.4;
 }
 
-.terminal-body:focus {
+
+.terminal-line {
+    margin-bottom: 2px;
+    word-break: break-all;
+}
+
+.prompt-line {
+    display: flex;
+    align-items: center;
+}
+
+.prompt {
+    color: #00ff00;
+    margin-right: 5px;
+    user-select: none;
+}
+
+.terminal-input {
+    background: transparent;
+    border: none;
     outline: none;
+    color: #f0f0f0;
+    font-size: 14px;
+    flex: 1;
+    caret-color: #f0f0f0;
 }
+
+.output-content {
+    display: flex;
+}
+
+.command .output-content {
+    color: #f0f0f0;
+}
+
+.output .output-content {
+    color: #ccc;
+}
+
