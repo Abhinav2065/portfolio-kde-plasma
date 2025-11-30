@@ -7,10 +7,11 @@ import file from '../assets/file.png'
 import arch from '../assets/arch.png'
 import Terminal from '../terminal/Terminal'
 import Icons from './Icons'
+import settings from '../assets/settings.png'
 import './Icons.css'
 import Firefox from './Firefox'
 import StartMenu from '../DesktopFeatures/StartMenu'
-
+import Settings from '../DesktopFeatures/Settings'
 
 
 
@@ -20,7 +21,7 @@ const Desktop = () => {
   const [showStartMenu, setShowStartMenu] = useState(false);
   const [showFirefox, setShowFirefox] = useState(false);
   const [startClick, setStartClick] = useState(false);
-  
+  const [showSettings, setShowSettings] = useState(false);
 
   
   const handleTerminalClose = () => {
@@ -69,6 +70,19 @@ const Desktop = () => {
     e.stopPropagation();
   }
 
+  const handleSettingsClose = () => {
+    console.log('Closing Settings');
+    setShowSettings(false);
+  }
+
+  const handleSettingsOpen = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    console.log('Opening Settings');
+    setShowSettings(true);
+  }
 
   return (
     <div>
@@ -81,6 +95,10 @@ const Desktop = () => {
             <StartMenu 
               onClick={handleStartMenuClick} 
             />
+          )}
+
+          {showSettings && (
+            <Settings onClose={handleSettingsClose}/>
           )} 
 
             <div className="taskbar">
@@ -88,7 +106,7 @@ const Desktop = () => {
                <li><Link><img src={arch} className='arch'  onClick={handleStartButtonClick}/></Link></li>
                     <li ><Link onClick={handleFirefoxOpen}><img src={firefox} alt="" className='firefox' /></Link></li>
                     <li><Link onClick={handleTerminalOpen} ><img src={terminal} alt="" className='terminal' /></Link></li>
-                    <li><Link><img src={file} alt="" className='file' /></Link></li>
+                    <li><Link onClick={handleSettingsOpen}><img src={settings} alt="Settings" className='file' /></Link></li>
                 </ul>
             </div>
         </div> 
