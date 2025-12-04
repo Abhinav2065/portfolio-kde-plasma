@@ -15,6 +15,10 @@
     flex-direction: column;
     justify-content: space-between;
     position: fixed;
+
+    animation: slideInRight 0.5s ease-out forwards;
+    right: 0;
+    margin-right: 10px;
 }
 
 
@@ -200,4 +204,15 @@
     position: absolute;
     bottom: 80px;
     
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100%);
+    }
+    to {
+        opacity: 0.76;
+        transform: translateX(0);
+    }
 }
