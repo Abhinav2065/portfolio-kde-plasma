@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import Draggable from 'react-draggable';
 import './Terminal.css';
 
@@ -11,32 +11,32 @@ const Terminal = ({onClose}) => {
 
   
   const nodeRef = useRef(null);  // This avoids "strict mode warnings"
-
-
-
   const inputRef = useRef(null);
-  const terminalRef = useRef(null);
   const outputEndRef = useRef(null);
 
 
-  const handleTerminalClick = useCallback(() => {
+
+  const handleTerminalClick = () => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
-  }, []);
+  };
 
 
   const handleCloseClick = (e) => {
-    e.stopPropagation();
     e.preventDefault();
+    e.stopPropagation();
     onClose();
   }
 
+ // Scrool to botoom in the terminal
   useEffect(() => {
     if (outputEndRef.current) {
-      outputEndRef.current.scrollIntoView({ behaviour: 'smooth'});
+      outputEndRef.current.scrollIntoView({ behavior: 'smooth'});
     }
   }, [output]);
+
+
 
  useEffect(() => {
   if (inputRef.current) {
@@ -134,16 +134,16 @@ const Terminal = ({onClose}) => {
  }
 
   return (
-    <Draggable nodeRef={nodeRef} handle='.terminal-header' defaultPosition={{x:200, y:100}} >
+    <Draggable nodeRef={nodeRef} handle='.terminal-header' defaultPosition={{x:0, y:0}} >
       <div ref={nodeRef} className="terminal-window" onClick={handleTerminalClick}>
 
           <div className="terminal-header">
-            <div className="terminal-title">Terminal</div>
-            <div className="terminal-close" onClick={handleCloseClick}>
+            <div className="terminal-title">ablag@arch</div>
+            <div className="terminal-close" onClick={handleCloseClick} onMouseDown={(e)=> e.stopPropagation()}>
               <button>x</button>
             </div>
           </div>
-          <div className="terminal-body" ref={terminalRef}>
+          <div className="terminal-body">
             <pre>
             {output.map((item, index) => (
               <div key={index} className={`terminal-line ${item.type}`}>
@@ -165,6 +165,7 @@ const Terminal = ({onClose}) => {
                 onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 autoFocus
+                autoComplete='off'
                 />
 
               </div>

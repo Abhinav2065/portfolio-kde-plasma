@@ -12,7 +12,7 @@ import './Icons.css'
 import Firefox from './Firefox'
 import StartMenu from '../DesktopFeatures/StartMenu'
 import Settings from '../DesktopFeatures/Settings'
-
+import Notepad from './Notepad'
 
 
 const Desktop = () => {
@@ -22,6 +22,11 @@ const Desktop = () => {
   const [showFirefox, setShowFirefox] = useState(false);
   const [startClick, setStartClick] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showNotepad, setShowNotepad] = useState(false);
+
+
+
+
 
   
   const handleTerminalClose = () => {
@@ -94,6 +99,8 @@ const Desktop = () => {
           {showStartMenu && (
             <StartMenu 
               onClick={handleStartMenuClick} 
+              onOpenFirefox = {handleFirefoxOpen}
+              onOpenTerminal={handleTerminalOpen}
             />
           )}
 

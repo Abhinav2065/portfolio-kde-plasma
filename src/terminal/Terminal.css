@@ -6,7 +6,8 @@
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    position: fixed;
+    position: absolute;
+    z-index: 9999;
 }
 
 
@@ -18,6 +19,7 @@
     align-items: center;
     border-bottom: 1px solid #555;
     cursor: grab;
+    pointer-events: auto;
 }
 
 .terminal-header:active {
@@ -61,6 +63,14 @@
 }
 
 
+.terminal-body pre {
+    margin: 0;
+    padding: 0;
+    pointer-events: none;
+}
+
+
+
 .terminal-line {
     margin-bottom: 2px;
     word-break: break-all;
@@ -85,6 +95,7 @@
     font-size: 14px;
     flex: 1;
     caret-color: #f0f0f0;
+    pointer-events: auto;
 }
 
 .output-content {
