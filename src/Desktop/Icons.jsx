@@ -21,9 +21,16 @@ const Icons = () => {
     {
       id:3, 
       name:'Links', 
-      top: 220, 
-      left: 220, 
-      content:'My github: https://github.com/Abhinav2065,\nMy LinkedIn: https://www.linkedin.com/in/abhinavsl/,\nMy Email: abhinavsl511@gmail.com,\ninstagram: silwalabhinav (only add me if you know me irl)'}
+      x: 220, 
+      y: 420, 
+      content:'My github: https://github.com/Abhinav2065,\nMy LinkedIn: https://www.linkedin.com/in/abhinavsl/,\nMy Email: abhinavsl511@gmail.com,\ninstagram: silwalabhinav (only add me if you know me irl)'},
+    {
+      id:4,
+      name:'passwords',
+      x: 300,
+      y: 200,
+      content: 'sudo password - "123"' 
+    }
   ]);
 
   const [openNotepad, setOpenNotepad] = useState(null);
