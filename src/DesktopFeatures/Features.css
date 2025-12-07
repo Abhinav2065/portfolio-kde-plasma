@@ -216,3 +216,8 @@
         transform: translateX(0);
     }
 }
+
+
+.start-menu-link {
+    text-decoration: none;
+}
