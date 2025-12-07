@@ -6,8 +6,13 @@
 
 
 .pfp {
-    border-radius: 100vh;
-    height: 20vh; 
+    border-radius: 50%;
+    height: 20vh;
+    border: 3px solid transparent;
+    padding: 1px;
+    background: 
+        linear-gradient(to right, rgb(33, 21, 208), rgb(189, 144, 238)) border-box;
+    border: 1px solid transparent;
 }
 
 .header-text {

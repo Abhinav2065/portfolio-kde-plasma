@@ -120,7 +120,7 @@ const Login = () => {
       </div>
       
       <div className="name">
-        Abhinav
+        Abhinav Siluwal
       </div>
 
       

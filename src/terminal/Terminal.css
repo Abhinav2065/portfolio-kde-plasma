@@ -17,6 +17,11 @@
     justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #555;
+    cursor: grab;
+}
+
+.terminal-header:active {
+    cursor: grabbing;
 }
 
 .terminal-title {

@@ -1,4 +1,5 @@
 import React, { useState, useRef, useCallback, useEffect } from 'react'
+import Draggable from 'react-draggable';
 import './Terminal.css';
 
 const Terminal = ({onClose}) => {
@@ -7,6 +8,11 @@ const Terminal = ({onClose}) => {
     {type: 'output', content: 'type "help" to see available commands' },
     {type: 'prompt' }
   ]);
+
+  
+  const nodeRef = useRef(null);  // This avoids "strict mode warnings"
+
+
 
   const inputRef = useRef(null);
   const terminalRef = useRef(null);
@@ -22,6 +28,7 @@ const Terminal = ({onClose}) => {
 
   const handleCloseClick = (e) => {
     e.stopPropagation();
+    e.preventDefault();
     onClose();
   }
 
@@ -127,7 +134,8 @@ const Terminal = ({onClose}) => {
  }
 
   return (
-      <div className="terminal-window" onClick={handleTerminalClick}>
+    <Draggable nodeRef={nodeRef} handle='.terminal-header' defaultPosition={{x:200, y:100}} >
+      <div ref={nodeRef} className="terminal-window" onClick={handleTerminalClick}>
 
           <div className="terminal-header">
             <div className="terminal-title">Terminal</div>
@@ -166,6 +174,7 @@ const Terminal = ({onClose}) => {
           <div ref={outputEndRef}/>
 
       </div>
+      </Draggable>
   )
 }
 
