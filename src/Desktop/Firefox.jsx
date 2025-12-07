@@ -1,10 +1,14 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
+import Draggable from 'react-draggable';
 import './Firefox.css'
 
 const Firefox = ({onClose}) => {
 
     const [url, setUrl] = useState("https://www.ask.com/"); // Initial Url (the page that shows up when u first open the browser)
     const [currentUrl, setCurrentUrl] = useState("https://www.ask.com/");
+
+
+    const nodeRef = useRef(null);
 
     const handleUrlSubmit = (e) => {
         e.preventDefault();
@@ -31,8 +35,8 @@ const Firefox = ({onClose}) => {
 
 
   return (
-    <div>
-        <div className="firefox-window">
+    <Draggable nodeRef={nodeRef} handle='.firefox-header' defaultPosition={{x:100, y:50}} >
+        <div ref={nodeRef} className="firefox-window">
            <div className="firefox-header">
                 <div className="header-icons">
                     <div className="header-icon" onClick={() => window.history.back()}> &larr;</div>
@@ -73,7 +77,7 @@ const Firefox = ({onClose}) => {
                 </iframe> {/* This loads the website */}
             </div>
         </div>
-    </div>
+    </Draggable>
   )
 }
 

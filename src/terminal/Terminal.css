@@ -1,6 +1,6 @@
 .terminal-window {
-    height: 400px;
-    width: 600px;
+    height: 800px;
+    width: 1200px;
     background-color: rgba(42, 42, 42, 0.869);
     border-radius: 5px;
     display: flex;
