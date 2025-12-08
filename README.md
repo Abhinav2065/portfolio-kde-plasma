@@ -23,7 +23,6 @@ So every "Apps" are in a different jsx and when you click on them then a functio
 - Full Desktop Environment Simulation
 - A working Taskbar 
 - Start Menu ( you can open apps but cannot search rn)
-- theme system (this is in the settings icon, it is half working)
 
 #### Applications
 - Terminal
@@ -36,8 +35,6 @@ So every "Apps" are in a different jsx and when you click on them then a functio
     - pwd (shows your location)
     - fastfetch (shows system information)
     - sudo rm -rf 
-    - mkdir  (makes a new directory)
-    - touch (makes a new file)
 
 - Browser
     A working Browser is features with
