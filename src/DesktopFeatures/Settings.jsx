@@ -82,13 +82,17 @@ const Settings = ({onClose}) => {
             <button className="settings-close-btn" onClick={onClose}>X</button>
         </div>
         <div className="settings-content">
-            <h3>Change Theme</h3>
-            <div className="theme-select">
-            <input type="radio" name="theme" id="normal" checked={currentTheme === 'normal'} onChange={handleDefaultTheme} />
-            <label htmlFor="normal">Normal Theme</label>
-            <input type="radio" name="theme" id="christmas" checked={currentTheme === 'christmas'} onChange={handleCristmasTheme}/>
-            <label htmlFor="christmas">Winter Theme</label>
+            <div className="settings-list">
+                <ul>
+                    <li>Display Settings</li>
+                    <li>Appereance Settings</li>
+                    <li>Action Settings</li>
+                    <li>Internet Settings</li>
+                    <li>Bluetooth Setings</li>
+                </ul>
             </div>
+
+            
         </div>
     </div>
     </Draggable>

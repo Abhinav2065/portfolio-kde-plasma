@@ -5,13 +5,13 @@ This is an portfolio website that shows anyone who visits my portfolio about the
 ## Project Details
 
 This Project is trying to simulate or replicate a Linux Based Desktop Environment Linux Kde Plasma. 
-It has basic things that an linux installation has like a browser, terminal, start menu, taskbar, etc.
+It has basic things that an linux installation has like a working browser, working terminal with a lot of commands, start menu, taskbar, draggable apps when they open, etc.
 A non technical person could easily mistake this site for an acutal desktop if the tab is in fullscreen.
 
 ### Tech Stack Used
 
 This Project is made using react+vite, with JS.
-There is not any extra library used for things like the terminal or any other features of the OS.
+
 
 ### Rough Idea of how things work
 
@@ -22,7 +22,7 @@ So every "Apps" are in a different jsx and when you click on them then a functio
 #### Desktop Environment
 - Full Desktop Environment Simulation
 - A working Taskbar 
-- Semi Working Start Menu (the apps cannot be searched and apps cannot be opened from it yet)
+- Start Menu ( you can open apps but cannot search rn)
 - theme system (this is in the settings icon, it is half working)
 
 #### Applications
@@ -35,6 +35,9 @@ So every "Apps" are in a different jsx and when you click on them then a functio
     - ls (displays all things on that directory)
     - pwd (shows your location)
     - fastfetch (shows system information)
+    - sudo rm -rf 
+    - mkdir  (makes a new directory)
+    - touch (makes a new file)
 
 - Browser
     A working Browser is features with
@@ -49,6 +52,9 @@ So every "Apps" are in a different jsx and when you click on them then a functio
 
 - Settings
     It is kinda WIP
+
+- Boot Animation 
+    There is a boot animation when you go to the website like in an actual linux OS.
 
 #### Notifications
 
