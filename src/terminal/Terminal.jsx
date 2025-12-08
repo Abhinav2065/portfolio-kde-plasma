@@ -95,7 +95,7 @@ const Terminal = ({onClose}) => {
       case 'sudo rm -rf':
         window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1";
         break;
-       
+        
 
       case 'fastfetch':
         response = `               

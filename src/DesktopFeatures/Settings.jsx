@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import Draggable from 'react-draggable';
 
 const Settings = ({onClose}) => {
     const [currentTheme, setCurentTheme] = useState('normal');
-
+    const nodeRef = useRef(null);
 
     const applyTheme = (theme) => {
         const desktop = document.querySelector('.desktop');
@@ -74,7 +75,8 @@ const Settings = ({onClose}) => {
         localStorage.setItem('desktop-theme', 'normal');
     };
   return (
-    <div className="settings-window">
+    <Draggable nodeRef={nodeRef} handle='.settings-header' defaultPosition={{x:100, y:-100}}>
+    <div ref={nodeRef} className="settings-window">
         <div className="settings-header">
             <div className="settings-title">Settings</div>
             <button className="settings-close-btn" onClick={onClose}>X</button>
@@ -89,6 +91,7 @@ const Settings = ({onClose}) => {
             </div>
         </div>
     </div>
+    </Draggable>
 )
 }
 

@@ -1,0 +1,50 @@
+.boot-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    background: black;
+    color: #0f0;
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    padding: 35px;
+    line-height: 1.35;
+    overflow-y: auto;
+    z-index: 99999;
+    user-select: none;
+    width: 100%;
+    margin-right: 10vw;
+    height: 100vh;
+}
+
+
+.fade-out {
+    animation: fadeScreen 1s forwards;
+}
+
+@keyframes fadeScreen {
+    0% {opacity: 1;}
+    100% {opacity: 0;}
+}
+
+.boot-lines p {
+    margin: 0;
+    padding: 0;
+    opacity: 0;
+    animation: showLine 0.15s forwards;
+}
+
+
+@keyframes showLine {
+    from {
+        opacity: 0;
+        filter: blur(1px);
+    }
+    to {
+        opacity: 1;
+        filter: blur(0);
+    }
+}
+
+
+.boot-screen {
+    overflow-y: auto;
+}
