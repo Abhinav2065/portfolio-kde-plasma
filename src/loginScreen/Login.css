@@ -57,17 +57,66 @@
 
 
 .login-animation-overlay {
+    width: 100vw;
+    height: 100vh;
     position:fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: #001c3b;;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 1000;
+    z-index: 9999;
+    animation: fadeInOverlay 0.3s ease-out forwards;
+}
+
+@keyframes fadeInOverlay {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+.animation-content {
+    text-align: center;
+    animation: fadeInContent 4.5s ease-out forwards;
+}
+
+.arch-logo {
+    width: 200px;
+    opacity: 0;
+    fill: drop-shadow(0 0 20px #131313);
+    animation: logoAppear 0.2s ease-out forwards;
+}
+
+@keyframes logoAppear {
+    0% {transform: scale(0.5); opacity: 0;}
+    60% {transform: scale(1.1); opacity: 1;}
+    100% {transform: scale(1); opacity: 1;}
+}
+
+
+.progress-container {
+    width: 400px;
+    height: 6px;
+    background-color: #a3a3a33a;
+    border-radius: 50px;
+    margin: 40px auto 0;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 0%;
+    background-color: #0099ff;
+    animation: progressAnim 1.6s ease-out forwards;
+}
+
+@keyframes progressAnim {
+    0% {width: 0%;}
+    15% {width: 15%;}
+    40% {width: 40%;}
+    70% {width: 70%;}
+    100% {width: 100%;}
 }
 
 

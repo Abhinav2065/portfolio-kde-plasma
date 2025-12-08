@@ -14,14 +14,6 @@ const Terminal = ({onClose}) => {
   const inputRef = useRef(null);
   const outputEndRef = useRef(null);
 
-  const [filesystem, setFileSystem] = useState({
-    Desktop: [],
-    Documents: [],
-    Downloads: [],
-    Music: [],
-    Pictures: [],
-    Videos: []
-  });
 
 
   const handleTerminalClick = () => {
@@ -89,8 +81,7 @@ const Terminal = ({onClose}) => {
         return;
 
       case 'ls':
-        const items = Object.keys(filesystem).join(" ");
-        response = items || "(empty)";
+        response = `Desktop Documents Downloads Music Pictures Videos`;
         break;
 
       case 'pwd':
@@ -104,50 +95,7 @@ const Terminal = ({onClose}) => {
       case 'sudo rm -rf':
         window.location.href = "https://www.youtube.com/watch?v=dQw4w9WgXcQ&list=RDdQw4w9WgXcQ&start_radio=1";
         break;
-
-      case trimmedCmd.split(" ")[0] === "mkdir" ? trimmedCmd : "":
-        {
-          const dir = trimmedCmd.split(" ")[1];
-
-          if (!dir) {
-            response = "mkdir: Mission Directory Name";
-            break;
-          }
-
-          if (filesystem[dir]) {
-            response = `Cannot create that directory, '${dir}': already exists`;
-            break;
-          }
-
-          setFileSystem(prev => ({
-            ...prev, 
-            [dir]: []
-          }));
-
-
-          response = `created directory '${dir}'`;
-          break;
-        }
-      
-
-      case trimmedCmd.split(" ")[0] === "touch" ? trimmedCmd: "":
-      {
-        const file = trimmedCmd.split(" ")[1];
-
-        if (!file) {
-          response = "touch: no file name";
-          break
-        }
-
-        setFileSystem(prev => ({
-          ...prev,
-          [file]:"file"
-        }));
-
-        response = `created file ${file}`;
-        break;
-
-      }
+       
 
       case 'fastfetch':
         response = `               

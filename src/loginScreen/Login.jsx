@@ -41,7 +41,10 @@ const Login = () => {
     e.preventDefault();
     setShowLoginAnimation(true);
     setPfpClick(true);
-  }
+    setTimeout(() => {
+      navigate('/desktop');
+    },2000)
+  };
 
   const handleNotificationBtnClose = () => {
     setNotification(null);
@@ -100,17 +103,18 @@ const Login = () => {
         />
       )}      
       
+
       {showLoginAnimation && (
         <div className="login-animation-overlay">
-          <div className="arch-logo-container">
-            <div className="arch-logo"><img src={archLinuxLoginPic} /></div>
-          </div>
-          <div className="login-status-bar">
-            <div className="login-progress-bar" style={{width: `${progress}`}}></div>
+          <div className="animation-content">
+            <img src={archLinuxLoginPic}  className="arch-logo" />
+
+            <div className="progress-container">
+              <div className="progress-bar"></div>
+            </div>
           </div>
         </div>
       )}
-
 
       <div className="header-text">
         <h1>Hi! I am</h1>
