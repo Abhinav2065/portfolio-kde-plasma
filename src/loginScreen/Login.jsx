@@ -92,7 +92,7 @@ const Login = () => {
 
 
   return (
-    <div onClick={handleClick} class="login-screen">
+    <div onClick={handleClick} className="login-screen">
 
       {notification && (
         <Notification

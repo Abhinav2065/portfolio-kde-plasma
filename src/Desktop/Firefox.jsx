@@ -14,7 +14,7 @@ const Firefox = ({onClose}) => {
         e.preventDefault();
 
         let newUrl = url;
-        if (!newUrl.startsWith('https://') && !newUrl.startsWith('https://')) {
+        if (!newUrl.startsWith('http://') && !newUrl.startsWith('https://')) {
             newUrl = "https://" + newUrl;
         }
         setCurrentUrl(newUrl);
@@ -70,7 +70,7 @@ const Firefox = ({onClose}) => {
 
             <div className="firefox-content">
                 <iframe 
-                    src={url} 
+                    src={currentUrl} 
                     title='Browser'
                     className='browser-frame'
                     >

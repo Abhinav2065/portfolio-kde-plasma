@@ -1,9 +1,7 @@
 import React, { useState } from 'react'
 import './Desktop.css'
-import { Link } from 'react-router-dom'
 import firefox from '../assets/firefox.png'
 import terminal from '../assets/terminal.png'
-import file from '../assets/file.png'
 import arch from '../assets/arch.png'
 import Terminal from '../terminal/Terminal'
 import Icons from './Icons'
@@ -20,7 +18,6 @@ const Desktop = () => {
  const [showterminal, setShowTerminal] = useState(false);
   const [showStartMenu, setShowStartMenu] = useState(false);
   const [showFirefox, setShowFirefox] = useState(false);
-  const [startClick, setStartClick] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showNotepad, setShowNotepad] = useState(false);
 
@@ -66,7 +63,7 @@ const Desktop = () => {
 
 
   const handleDesktopClick = () => {
-    if (showStartMenu && !startClick) {
+    if (showStartMenu) {
       setShowStartMenu(false);
     }
   }
@@ -89,11 +86,30 @@ const Desktop = () => {
     setShowSettings(true);
   }
 
+  const handleNotepadOpen = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowNotepad(true);
+  }
+
+  const handleNotepadClose = () => {
+    setShowNotepad(false);
+  }
+
   return (
     <div>
        <div className="desktop" onClick={handleDesktopClick}>
             {showterminal && <Terminal onClose={handleTerminalClose}/>}
             {showFirefox && <Firefox onClose={handleFirefoxClose} />}
+            {showNotepad && (
+              <Notepad
+                title="Notepad"
+                content="Welcome to my portfolio desktop! Double-click the desktop icons to read about me, my projects, and my links."
+                onClose={handleNotepadClose}
+              />
+            )}
            <Icons></Icons> 
 
           {showStartMenu && (
@@ -101,6 +117,7 @@ const Desktop = () => {
               onClick={handleStartMenuClick} 
               onOpenFirefox = {handleFirefoxOpen}
               onOpenTerminal={handleTerminalOpen}
+              onOpenNotepad={handleNotepadOpen}
             />
           )}
 
@@ -110,10 +127,10 @@ const Desktop = () => {
 
             <div className="taskbar">
                 <ul>
-               <li><Link><img src={arch} className='arch'  onClick={handleStartButtonClick}/></Link></li>
-                    <li ><Link onClick={handleFirefoxOpen}><img src={firefox} alt="" className='firefox' /></Link></li>
-                    <li><Link onClick={handleTerminalOpen} ><img src={terminal} alt="" className='terminal' /></Link></li>
-                    <li><Link onClick={handleSettingsOpen}><img src={settings} alt="Settings" className='file' /></Link></li>
+                    <li><button type="button" className="taskbar-btn" onClick={handleStartButtonClick}><img src={arch} alt="Start Menu" className='arch' /></button></li>
+                    <li><button type="button" className="taskbar-btn" onClick={handleFirefoxOpen}><img src={firefox} alt="Firefox" className='firefox' /></button></li>
+                    <li><button type="button" className="taskbar-btn" onClick={handleTerminalOpen}><img src={terminal} alt="Terminal" className='terminal' /></button></li>
+                    <li><button type="button" className="taskbar-btn" onClick={handleSettingsOpen}><img src={settings} alt="Settings" className='file' /></button></li>
                 </ul>
             </div>
         </div> 

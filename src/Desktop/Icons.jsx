@@ -89,7 +89,7 @@ const Icons = () => {
                 style={{
                   position: 'absolute',
                   cursor: 'pointer',
-                  widows: '80x',
+                  width: '80px',
                   textAlign: 'center',
                   color: 'white'
                 }}

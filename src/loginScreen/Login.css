@@ -9,10 +9,12 @@
     border-radius: 50%;
     height: 20vh;
     border: 3px solid transparent;
-    padding: 1px;
-    background: 
+    padding: 2px;
+    background:
+        linear-gradient(#001c3b, #001c3b) padding-box,
         linear-gradient(to right, rgb(33, 21, 208), rgb(189, 144, 238)) border-box;
-    border: 1px solid transparent;
+    box-sizing: border-box;
+    cursor: pointer;
 }
 
 .header-text {
