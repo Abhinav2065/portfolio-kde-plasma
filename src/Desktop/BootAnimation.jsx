@@ -65,7 +65,7 @@ const BootAnimation = () => {
     
     }, finishTime);
     return() => clearTimeout(timer);
-  }, []);
+  }, [navigate]);
 
 
 

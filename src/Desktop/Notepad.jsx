@@ -1,11 +1,17 @@
-import React, { useRef} from 'react'
+import React, { useRef, useState } from 'react'
 import Draggable from 'react-draggable'
 
 
-const Notepad = ({title, content , onClose}) => {
+const Notepad = ({title, content, onClose}) => {
 
     const nodeRef = useRef(null);
+    const storageKey = `notepad-${title}`;
+    const [value, setValue] = useState(() => localStorage.getItem(storageKey) ?? content);
 
+    const handleChange = (e) => {
+        setValue(e.target.value);
+        localStorage.setItem(storageKey, e.target.value);
+    }
 
   return (
     <Draggable nodeRef={nodeRef} handle='.notepad-header' defaultPosition={{x:0, y:0}}>
@@ -19,7 +25,7 @@ const Notepad = ({title, content , onClose}) => {
                 </div>
             </div>
             <div className="notepad-body">
-                <textarea defaultValue={content} style={{width: '100%', height:'300px'}} className='text-area'></textarea>
+                <textarea value={value} onChange={handleChange} style={{width: '100%', height:'300px'}} className='text-area'></textarea>
             </div>
         </div>
     </Draggable>

@@ -11,7 +11,6 @@ const Login = () => {
   const [pfpClick, setPfpClick] = useState(false);
   const [notification, setNotification] = useState(null); 
   const [showLoginAnimation, setShowLoginAnimation] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   const navigate = useNavigate();
 
@@ -41,9 +40,6 @@ const Login = () => {
     e.preventDefault();
     setShowLoginAnimation(true);
     setPfpClick(true);
-    setTimeout(() => {
-      navigate('/desktop');
-    },2000)
   };
 
   const handleNotificationBtnClose = () => {
@@ -70,22 +66,18 @@ const Login = () => {
       const steps = duration/interval;
       const increment = 100 / steps;
 
-
       let currentProgress = 0;
 
       const progressTimer = setInterval(() => {
         currentProgress += increment;
-        setProgress(Math.min(currentProgress, 100));
-
 
         if (currentProgress >= 100) {
           clearInterval(progressTimer);
-
-          setTimeout(() => {
-            navigate('/desktop');
-          }, 200);
+          navigate('/desktop');
         }
       })
+
+      return () => clearInterval(progressTimer);
     }
   }, [showLoginAnimation, navigate]);
 

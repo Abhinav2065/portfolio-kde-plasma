@@ -1,17 +1,22 @@
 import React from 'react'
 
-const Display = () => {
+const Display = ({brightness, onChangeBrightness, nightLight, onToggleNightLight}) => {
   return (
-    <div>
-        <div className="display">
-            <h3>Display</h3>
-            <label htmlFor="myRange">Brightness</label>
-            <input type="range" min="1" max="100" value="50" class="slider" id="myRange"></input>
-            <label htmlFor="night-light">Night Light</label>
-            <input type="button" value="Night-light" id='night-light' />
-            <h4>Scale and Layout</h4>
-            
-        </div>
+    <div className="display">
+        <h3>Display</h3>
+        <label htmlFor="brightness">Brightness</label>
+        <input
+          type="range"
+          min="1"
+          max="100"
+          value={brightness}
+          className="slider"
+          id="brightness"
+          onChange={(e) => onChangeBrightness(e.target.value)}
+        />
+        <label htmlFor="night-light">Night Light</label>
+        <input type="button" value={nightLight ? 'On' : 'Off'} id='night-light' onClick={onToggleNightLight} />
+        <h4>Scale and Layout</h4>
     </div>
   )
 }

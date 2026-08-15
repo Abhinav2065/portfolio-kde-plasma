@@ -3,8 +3,7 @@ import notepad from '../assets/notepad.png'
 import Notepad from './Notepad';
 import Draggable from 'react-draggable';
 
-const Icons = () => {
-  const [icons, setIcons] = useState([
+const defaultIcons = [
     {
       id: 1,
       name:'About Me', 
@@ -36,9 +35,25 @@ const Icons = () => {
       name:"projects",
       x: 700,
       y: 400,
-    content: 'Here are some of the Projects that i have worked on: \n\n\n 1. Wheel Bugie Suspention System \n So i made a simple wheel bugie suspention system( the kinda suspention that are used in rovers for space and stuff), so the rover could easily travel through rough terrain if it were given a decently good torque motor according to its weight. I really had fun making this project as it was one of my favourate hardware project that i made for my schools annual Science Fair called Code Walk. Really had a fun time explaining the project as well. \n\n\n 2. Self Balancing Robot using PID controllers \n I made an self balancing robot that balanced on 2 wheels using the PID controller. so it had an gyroscope which detected how much it tilts and how fast it tilts and the PID controller is tuned in such a way that according to the tilt the robo will move its 2 parallel wheels on the tilting side to get the robo upright. This will cause the robot to stay upright despite of some simple human disturbance. I think i learned a lot via this project so i really like this project. \n\n\n 3. Solar Sysmte Simulation using webGl \n I made some solar system simulation using welgl, it had both 2d and 3d version of them, they used the newtonian physics for the simulation and it was really fun to build that project because it got me into simulations and also it was really fun to mess around with the masses and universal gravitational constant to see effects like slingshot in space and also i found it really intresting that the values have to be soo specefic to have a good stable orbin, made me realize that the solar system is kinda rare and magical. \n\n\n 4. Pika Network API \n So this is the first project i made for my needs and others also used this project, so basically i was really into pika network bedwars and i wanted to grind bedwars and wanted a more better overlays then what the pika community had so i wrote my own in python, it was really fun because it was the first thing thta i made that i used soo much and even other people used so much. So it used to bed the players usernames via the minecraft log files and from that the python program would take that username and get player stats from the pika network api and display it via typing is really fast in private chat so that not only me but my teammates can also see the stats of other people so that we can be carefull while playing.(helps you not get your ass whooped by try hards bascially) \n\n You can find all of my projects on my github at github.com/Abhinav2065. Feel free to follow me on github (please)'
+    content: 'Here are some of the Projects that i have worked on: \n\n\n 1. Wheel Bugie Suspention System \n So i made a simple wheel bugie suspention system( the kinda suspention that are used in rovers for space and stuff), so the rover could easily travel through rough terrain if it were given a decently good torque motor according to its weight. I really had fun making this project as it was one of my favourate hardware project that i made for my schools annual Science Fair called Code Walk. Really had a fun time explaining the project as well. \n\n\n 2. Self Balancing Robot using PID controllers \n I made an self balancing robot that balanced on 2 wheels using the PID controller. so it had an gyroscope which detected how much it tilts and how fast it tilts and the PID controller is tuned in such a way that according to the tilt the robo will move its 2 parallel wheels on the tilting side to get the robo upright. This will cause the robot to stay upright despite of some simple human disturbance. I think i learned a lot via this project so i really like this project. \n\n\n 3. Solar Sysmte Simulation using webGl \n I made some solar system simulation using welgl, it had both 2d and 3d version of them, they used the newtonian physics for the simulation and it was really fun to build that project because it got me into simulations and also it was really fun to mess around with the masses and universal gravitational constant to see effects like slingshot in space and also i found it really intresting that the values have to be soo specefic to have a good stable orbin, made me realize that the solar system is kinda rare and magical. \n\n\n 4. Pika Network API \n So this is the first project i made for my needs and others also used this project, so basically i was really into pika network bedwars and i wanted to grind bedwars and wanted a more better overlays then what the pika community had so i wrote my own in python, it was really fun because it was the first thin... (line truncated to 2000 chars)'}
+  ];
+
+const loadPositions = () => {
+    try {
+        return JSON.parse(localStorage.getItem('desktop-icons')) || null;
+    } catch {
+        return null;
     }
-  ]);
+}
+
+const Icons = () => {
+  const [icons, setIcons] = useState(() => {
+    const saved = loadPositions();
+    if (!saved) return defaultIcons;
+    return defaultIcons.map(icon =>
+        saved[icon.id] ? {...icon, x: saved[icon.id].x, y: saved[icon.id].y} : icon
+    );
+  });
 
   const [openNotepad, setOpenNotepad] = useState(null);
 
@@ -60,12 +75,20 @@ const Icons = () => {
   }
 
   const handleStop = (e, data, id) => {
-    setIcons(prevIcons => prevIcons.map(icon => {
-      if (icon.id  === id) {
-        return {...icon, x: data.x, y: data.y};
-      }
-      return icon;
-    }))
+    setIcons(prevIcons => {
+      const nextIcons = prevIcons.map(icon => {
+        if (icon.id  === id) {
+          return {...icon, x: data.x, y: data.y};
+        }
+        return icon;
+      });
+
+      const positions = {};
+      nextIcons.forEach(icon => positions[icon.id] = {x: icon.x, y: icon.y});
+      localStorage.setItem('desktop-icons', JSON.stringify(positions));
+
+      return nextIcons;
+    })
   }
 
 

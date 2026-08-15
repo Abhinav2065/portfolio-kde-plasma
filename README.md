@@ -22,7 +22,9 @@ So every "Apps" are in a different jsx and when you click on them then a functio
 #### Desktop Environment
 - Full Desktop Environment Simulation
 - A working Taskbar 
-- Start Menu ( you can open apps but cannot search rn)
+- Start Menu (search works, opens Firefox, Notepad and Terminal)
+- Draggable app windows and desktop icons
+- Persistence via localStorage (notepad content, icon positions, theme, brightness)
 
 #### Applications
 - Terminal
@@ -48,7 +50,7 @@ So every "Apps" are in a different jsx and when you click on them then a functio
     A notepad app that i am using to show my info
 
 - Settings
-    It is kinda WIP
+    Working Settings with a Display page (brightness + night light) and an Appearance page (Normal / Christmas theme)
 
 - Boot Animation 
     There is a boot animation when you go to the website like in an actual linux OS.

@@ -105,6 +105,78 @@
     flex-direction: column;
     position: absolute;
     bottom: 100px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.settings-content {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+.settings-list {
+    width: 200px;
+    background-color: rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+}
+
+.settings-list ul {
+    list-style: none;
+    margin: 0;
+    padding: 8px;
+}
+
+.settings-list li {
+    padding: 10px 12px;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: background-color 0.15s ease;
+}
+
+.settings-list li:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.settings-list li.active {
+    background-color: rgba(29, 78, 216, 0.6);
+}
+
+.settings-page {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.settings-btn {
+    background-color: rgba(29, 78, 216, 0.8);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 8px 16px;
+    margin-right: 10px;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.settings-btn:hover {
+    background-color: rgba(29, 78, 216, 1);
+}
+
+.theme-options {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.display label {
+    display: block;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+.slider {
+    width: 60%;
 }
 
 

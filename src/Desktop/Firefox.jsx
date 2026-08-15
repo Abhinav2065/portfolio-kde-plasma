@@ -2,13 +2,32 @@ import React, { useRef, useState } from 'react'
 import Draggable from 'react-draggable';
 import './Firefox.css'
 
+const HOME_URL = 'https://www.ask.com/';
+
 const Firefox = ({onClose}) => {
 
-    const [url, setUrl] = useState("https://www.ask.com/"); // Initial Url (the page that shows up when u first open the browser)
-    const [currentUrl, setCurrentUrl] = useState("https://www.ask.com/");
-
+    const [url, setUrl] = useState(HOME_URL);
+    const [history, setHistory] = useState([HOME_URL]);
+    const [index, setIndex] = useState(0);
 
     const nodeRef = useRef(null);
+    const currentUrl = history[index];
+
+    const goTo = (nextUrl, replace = false) => {
+        if (replace) {
+            setHistory(prev => {
+                const next = [...prev];
+                next[index] = nextUrl;
+                return next;
+            });
+        } else {
+            const trimmed = history.slice(0, index + 1);
+            trimmed.push(nextUrl);
+            setHistory(trimmed);
+            setIndex(trimmed.length - 1);
+        }
+        setUrl(nextUrl);
+    }
 
     const handleUrlSubmit = (e) => {
         e.preventDefault();
@@ -17,20 +36,33 @@ const Firefox = ({onClose}) => {
         if (!newUrl.startsWith('http://') && !newUrl.startsWith('https://')) {
             newUrl = "https://" + newUrl;
         }
-        setCurrentUrl(newUrl);
+        goTo(newUrl);
     }
 
     const handleUrlChange = (e) => {
         setUrl(e.target.value);
     }
 
+    const handleBack = () => {
+        if (index > 0) {
+            setIndex(index - 1);
+            setUrl(history[index - 1]);
+        }
+    }
+
+    const handleForward = () => {
+        if (index < history.length - 1) {
+            setIndex(index + 1);
+            setUrl(history[index + 1]);
+        }
+    }
+
     const handleRefresh = () => {
-        setCurrentUrl(currentUrl + '?refresh=' + Math.random());
+        goTo(currentUrl + '?refresh=' + Math.random(), true);
     }
 
     const handleHome = () => {
-        setUrl("https://www.ask.com/");
-        setCurrentUrl("https://www.ask.com/");
+        goTo(HOME_URL);
     }
 
 
@@ -39,9 +71,9 @@ const Firefox = ({onClose}) => {
         <div ref={nodeRef} className="firefox-window">
            <div className="firefox-header">
                 <div className="header-icons">
-                    <div className="header-icon" onClick={() => window.history.back()}> &larr;</div>
-                    <div className="header-icon" onClick={() => window.history.forward()}> &rarr;</div>
-                    <div className="btn btn-default btn-sm" onClick={handleRefresh}><i className='material-icon'>⟳</i></div> 
+                    <div className="header-icon" onClick={handleBack}> &larr;</div>
+                    <div className="header-icon" onClick={handleForward}> &rarr;</div>
+                    <div className="btn btn-default btn-sm" onClick={handleRefresh}><i className='material-icon'>⟳</i></div>
                     <div className="home-icon" onClick={handleHome}>⌂</div>
                 </div>
 
@@ -49,10 +81,10 @@ const Firefox = ({onClose}) => {
                     <form onSubmit={handleUrlSubmit} className="url-form">
                     <div className="url-bar">
                         <div className="lock-icon">🔒</div>
-                        <input 
-                            type="text" 
-                            onSubmit={handleUrlChange}
+                        <input
+                            type="text"
                             value={url}
+                            onChange={handleUrlChange}
                             className='url-input'
                             placeholder='Enter Url'
                         />
@@ -65,16 +97,15 @@ const Firefox = ({onClose}) => {
                     <div className="hamberg-icon">☰</div>
                     <div className="cross-icon" onClick={onClose}>X</div>
                 </div>
-            </div> 
+            </div>
 
 
             <div className="firefox-content">
-                <iframe 
-                    src={currentUrl} 
+                <iframe
+                    src={currentUrl}
                     title='Browser'
                     className='browser-frame'
-                    >
-                </iframe> {/* This loads the website */}
+                />
             </div>
         </div>
     </Draggable>
