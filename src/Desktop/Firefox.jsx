@@ -2,110 +2,188 @@ import React, { useRef, useState } from 'react'
 import Draggable from 'react-draggable';
 import './Firefox.css'
 
-const HOME_URL = 'https://www.ask.com/';
+const HOME_URL = 'about:newtab';
+const SEARCH_URL = 'https://search.marginalia.nu/search?query=';
+
+const isUrl = (input) => {
+    const trimmed = input.trim();
+    return /^https?:\/\//.test(trimmed) || (trimmed.includes('.') && !trimmed.includes(' '));
+}
+
+const StartPage = ({onSearch}) => {
+    const [query, setQuery] = useState('');
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (query.trim()) onSearch(query.trim());
+    }
+
+    return (
+        <div className="start-page">
+            <div className="start-page-logo">🔎</div>
+            <h1 className="start-page-title">Web Search</h1>
+            <form className="start-page-search" onSubmit={handleSubmit}>
+                <input
+                    type="text"
+                    className="start-page-input"
+                    placeholder="Search the web..."
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    autoFocus
+                />
+            </form>
+        </div>
+    )
+}
 
 const Firefox = ({onClose}) => {
-
-    const [url, setUrl] = useState(HOME_URL);
-    const [history, setHistory] = useState([HOME_URL]);
-    const [index, setIndex] = useState(0);
+    const [tabs, setTabs] = useState([{ id: 1, url: HOME_URL, history: [HOME_URL], index: 0 }]);
+    const [activeTabId, setActiveTabId] = useState(1);
+    const [urlInput, setUrlInput] = useState(HOME_URL);
+    const [nextId, setNextId] = useState(2);
 
     const nodeRef = useRef(null);
-    const currentUrl = history[index];
 
-    const goTo = (nextUrl, replace = false) => {
-        if (replace) {
-            setHistory(prev => {
-                const next = [...prev];
-                next[index] = nextUrl;
-                return next;
-            });
-        } else {
-            const trimmed = history.slice(0, index + 1);
-            trimmed.push(nextUrl);
-            setHistory(trimmed);
-            setIndex(trimmed.length - 1);
-        }
-        setUrl(nextUrl);
+    const activeTab = tabs.find(t => t.id === activeTabId);
+    const currentUrl = activeTab.url;
+    const isHome = currentUrl === HOME_URL;
+
+    const patchTab = (id, patch) => {
+        setTabs(prev => prev.map(t => t.id === id ? { ...t, ...patch } : t));
+    }
+
+    const goTo = (nextUrl) => {
+        const trimmed = activeTab.history.slice(0, activeTab.index + 1);
+        trimmed.push(nextUrl);
+        patchTab(activeTab.id, { url: nextUrl, history: trimmed, index: trimmed.length - 1 });
+        setUrlInput(nextUrl);
     }
 
     const handleUrlSubmit = (e) => {
         e.preventDefault();
-
-        let newUrl = url;
-        if (!newUrl.startsWith('http://') && !newUrl.startsWith('https://')) {
-            newUrl = "https://" + newUrl;
+        if (isUrl(urlInput)) {
+            goTo(urlInput.trim());
+        } else {
+            goTo(SEARCH_URL + encodeURIComponent(urlInput.trim()));
         }
-        goTo(newUrl);
     }
 
-    const handleUrlChange = (e) => {
-        setUrl(e.target.value);
+    const handleSearch = (query) => {
+        goTo(SEARCH_URL + encodeURIComponent(query));
     }
 
     const handleBack = () => {
-        if (index > 0) {
-            setIndex(index - 1);
-            setUrl(history[index - 1]);
+        if (activeTab.index > 0) {
+            const prev = activeTab.history[activeTab.index - 1];
+            patchTab(activeTab.id, { url: prev, index: activeTab.index - 1 });
+            setUrlInput(prev);
         }
     }
 
     const handleForward = () => {
-        if (index < history.length - 1) {
-            setIndex(index + 1);
-            setUrl(history[index + 1]);
+        if (activeTab.index < activeTab.history.length - 1) {
+            const next = activeTab.history[activeTab.index + 1];
+            patchTab(activeTab.id, { url: next, index: activeTab.index + 1 });
+            setUrlInput(next);
         }
     }
 
     const handleRefresh = () => {
-        goTo(currentUrl + '?refresh=' + Math.random(), true);
+        const refreshed = currentUrl + (currentUrl.includes('?') ? '&' : '?') + 'refresh=' + Math.random();
+        patchTab(activeTab.id, { url: refreshed });
+        setUrlInput(refreshed);
     }
 
     const handleHome = () => {
         goTo(HOME_URL);
     }
 
+    const newTab = () => {
+        const id = nextId;
+        setNextId(nextId + 1);
+        setTabs(prev => [...prev, { id, url: HOME_URL, history: [HOME_URL], index: 0 }]);
+        setActiveTabId(id);
+        setUrlInput(HOME_URL);
+    }
+
+    const switchTab = (id) => {
+        const tab = tabs.find(t => t.id === id);
+        setActiveTabId(id);
+        setUrlInput(tab.url);
+    }
+
+    const closeTab = (id) => {
+        if (tabs.length === 1) return;
+        const remaining = tabs.filter(t => t.id !== id);
+        setTabs(remaining);
+        if (id === activeTabId) {
+            const nextActive = remaining[remaining.length - 1];
+            setActiveTabId(nextActive.id);
+            setUrlInput(nextActive.url);
+        }
+    }
+
 
   return (
-    <Draggable nodeRef={nodeRef} handle='.firefox-header' defaultPosition={{x:100, y:50}} >
+    <Draggable nodeRef={nodeRef} handle='.firefox-tabstrip' defaultPosition={{x:100, y:50}} >
         <div ref={nodeRef} className="firefox-window">
-           <div className="firefox-header">
-                <div className="header-icons">
-                    <div className="header-icon" onClick={handleBack}> &larr;</div>
-                    <div className="header-icon" onClick={handleForward}> &rarr;</div>
-                    <div className="btn btn-default btn-sm" onClick={handleRefresh}><i className='material-icon'>⟳</i></div>
-                    <div className="home-icon" onClick={handleHome}>⌂</div>
+            <div className="firefox-tabstrip">
+                <div className="tabs-container">
+                    {tabs.map(tab => (
+                        <div
+                            key={tab.id}
+                            className={`firefox-tab ${tab.id === activeTabId ? 'active' : ''}`}
+                            onClick={() => switchTab(tab.id)}
+                        >
+                            <span className="tab-title">{tab.url === HOME_URL ? 'New Tab' : tab.url.replace(/^https?:\/\//, '')}</span>
+                            <button
+                                type="button"
+                                className="tab-close"
+                                onClick={(e) => { e.stopPropagation(); closeTab(tab.id); }}
+                            >×</button>
+                        </div>
+                    ))}
+                    <button type="button" className="new-tab-btn" onClick={newTab} title="New Tab">+</button>
                 </div>
+                <div className="window-controls">
+                    <button type="button" className="wc-btn" title="Minimize" onClick={() => {}}>—</button>
+                    <button type="button" className="wc-btn" title="Maximize" onClick={() => {}}>▢</button>
+                    <button type="button" className="wc-btn wc-close" title="Close" onClick={onClose}>✕</button>
+                </div>
+            </div>
 
-                <div className="url-bar-section">
-                    <form onSubmit={handleUrlSubmit} className="url-form">
+            <div className="firefox-toolbar">
+                <button type="button" className="toolbar-btn" onClick={handleBack} title="Back" disabled={activeTab.index === 0}>←</button>
+                <button type="button" className="toolbar-btn" onClick={handleForward} title="Forward" disabled={activeTab.index >= activeTab.history.length - 1}>→</button>
+                <button type="button" className="toolbar-btn" onClick={handleRefresh} title="Reload">⟳</button>
+                <button type="button" className="toolbar-btn" onClick={handleHome} title="Home">⌂</button>
+
+                <form onSubmit={handleUrlSubmit} className="url-form">
                     <div className="url-bar">
                         <div className="lock-icon">🔒</div>
                         <input
                             type="text"
-                            value={url}
-                            onChange={handleUrlChange}
+                            value={urlInput}
+                            onChange={(e) => setUrlInput(e.target.value)}
                             className='url-input'
-                            placeholder='Enter Url'
+                            placeholder='Search or enter address'
                         />
-                        <button type='submit' className="go-button">Go</button>
                     </div>
-                    </form>
-                </div>
+                </form>
 
-                <div className="firefox-header-icons-left-side">
-                    <div className="hamberg-icon">☰</div>
-                    <div className="cross-icon" onClick={onClose}>X</div>
-                </div>
+                <button type="button" className="toolbar-btn" title="Menu">☰</button>
             </div>
 
-
             <div className="firefox-content">
-                <iframe
-                    src={currentUrl}
-                    title='Browser'
-                    className='browser-frame'
-                />
+                {isHome ? (
+                    <StartPage onSearch={handleSearch} />
+                ) : (
+                    <iframe
+                        src={currentUrl}
+                        title='Browser'
+                        className='browser-frame'
+                    />
+                )}
             </div>
         </div>
     </Draggable>

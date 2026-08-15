@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Desktop.css'
 import firefox from '../assets/firefox.png'
 import terminal from '../assets/terminal.png'
@@ -15,34 +15,39 @@ import Notepad from './Notepad'
 
 const Desktop = () => {
 
- const [showterminal, setShowTerminal] = useState(false);
+  const [showterminal, setShowTerminal] = useState(false);
   const [showStartMenu, setShowStartMenu] = useState(false);
   const [showFirefox, setShowFirefox] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [showNotepad, setShowNotepad] = useState(false);
+  const [now, setNow] = useState(new Date());
 
+  useEffect(() => {
+    const timer = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(timer);
+  }, []);
 
+  const timeString = now.toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hours12: true
+  });
+  const dateString = now.toLocaleDateString(undefined, { weekday: 'short', day: 'numeric', month: 'short' });
 
-
-
-  
   const handleTerminalClose = () => {
-    console.log('Closing The Terminal');
     setShowTerminal(false);
-  }  
+  }
 
   const handleTerminalOpen = (e) => {
     if (e) {
       e.preventDefault();
       e.stopPropagation();
     }
-    console.log('Opening The Terminal');
     setShowTerminal(true);
   }
 
 
   const handleFirefoxClose = () => {
-    console.log('Closing Firefox');
     setShowFirefox(false);
   }
 
@@ -51,14 +56,14 @@ const Desktop = () => {
       e.preventDefault();
       e.stopPropagation();
     }
-    console.log('Opening Firefox');
     setShowFirefox(true);
   }
 
 
 
-  const handleStartButtonClick = () => {
-    setShowStartMenu(true);
+  const handleStartButtonClick = (e) => {
+    e.stopPropagation();
+    setShowStartMenu(prev => !prev);
   }
 
 
@@ -73,7 +78,6 @@ const Desktop = () => {
   }
 
   const handleSettingsClose = () => {
-    console.log('Closing Settings');
     setShowSettings(false);
   }
 
@@ -82,7 +86,6 @@ const Desktop = () => {
       e.preventDefault();
       e.stopPropagation();
     }
-    console.log('Opening Settings');
     setShowSettings(true);
   }
 
@@ -110,11 +113,11 @@ const Desktop = () => {
                 onClose={handleNotepadClose}
               />
             )}
-           <Icons></Icons> 
+           <Icons></Icons>
 
           {showStartMenu && (
-            <StartMenu 
-              onClick={handleStartMenuClick} 
+            <StartMenu
+              onClick={handleStartMenuClick}
               onOpenFirefox = {handleFirefoxOpen}
               onOpenTerminal={handleTerminalOpen}
               onOpenNotepad={handleNotepadOpen}
@@ -123,17 +126,28 @@ const Desktop = () => {
 
           {showSettings && (
             <Settings onClose={handleSettingsClose}/>
-          )} 
+          )}
 
             <div className="taskbar">
-                <ul>
-                    <li><button type="button" className="taskbar-btn" onClick={handleStartButtonClick}><img src={arch} alt="Start Menu" className='arch' /></button></li>
-                    <li><button type="button" className="taskbar-btn" onClick={handleFirefoxOpen}><img src={firefox} alt="Firefox" className='firefox' /></button></li>
-                    <li><button type="button" className="taskbar-btn" onClick={handleTerminalOpen}><img src={terminal} alt="Terminal" className='terminal' /></button></li>
-                    <li><button type="button" className="taskbar-btn" onClick={handleSettingsOpen}><img src={settings} alt="Settings" className='file' /></button></li>
-                </ul>
+                    <button type="button" className={`taskbar-btn start-btn ${showStartMenu ? 'active' : ''}`} onClick={handleStartButtonClick} title="Start Menu">
+                        <img src={arch} alt="Start Menu" className='tb-arch' />
+                    </button>
+                    <button type="button" className={`taskbar-btn ${showFirefox ? 'active' : ''}`} onClick={handleFirefoxOpen} title="Firefox">
+                        <img src={firefox} alt="Firefox" className='tb-firefox' />
+                    </button>
+                    <button type="button" className={`taskbar-btn ${showterminal ? 'active' : ''}`} onClick={handleTerminalOpen} title="Terminal">
+                        <img src={terminal} alt="Terminal" className='tb-terminal' />
+                    </button>
+                    <button type="button" className={`taskbar-btn ${showSettings ? 'active' : ''}`} onClick={handleSettingsOpen} title="Settings">
+                        <img src={settings} alt="Settings" className='tb-settings' />
+                    </button>
+
+                    <div className="taskbar-clock">
+                        <span className="tb-time">{timeString}</span>
+                        <span className="tb-date">{dateString}</span>
+                    </div>
             </div>
-        </div> 
+        </div>
     </div>
   )
 }

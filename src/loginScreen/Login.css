@@ -1,70 +1,155 @@
 
 .login-screen {
     min-height: 100vh;
-    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background: linear-gradient(180deg, #00284f 0%, #001c3b 45%, #001226 100%);
 }
 
+.login-user-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 .pfp {
     border-radius: 50%;
-    height: 20vh;
-    border: 3px solid transparent;
-    padding: 2px;
+    height: 160px;
+    width: 160px;
+    object-fit: cover;
+    padding: 4px;
+    cursor: pointer;
+    box-sizing: border-box;
     background:
         linear-gradient(#001c3b, #001c3b) padding-box,
-        linear-gradient(to right, rgb(33, 21, 208), rgb(189, 144, 238)) border-box;
-    box-sizing: border-box;
-    cursor: pointer;
+        linear-gradient(135deg, rgb(33, 21, 208), rgb(189, 144, 238)) border-box;
+    border: 2px solid transparent;
+    box-shadow: 0 0 30px rgba(92, 107, 192, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.header-text {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding-top: 20vh;
-}
-
-.pfp-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 2vh;
+.pfp:hover {
+    transform: scale(1.04);
+    box-shadow: 0 0 45px rgba(92, 107, 192, 0.55);
 }
 
 .name {
-
-    display: flex;
-    justify-content: center;
-    padding-top: 3vh;
-    font-size: 25px;
+    margin-top: 18px;
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
-.info {
+.login-form {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding-top: 5vh;
+    gap: 8px;
+    margin-top: 18px;
 }
 
-.date-day {
+.password-input {
+    width: 240px;
+    height: 40px;
+    padding: 0 14px;
+    font-size: 15px;
+    color: #e0e0e0;
+    background-color: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    outline: none;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+
+.password-input:focus {
+    border-color: rgba(92, 107, 192, 0.9);
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.password-input::placeholder {
+    color: rgba(224, 224, 224, 0.5);
+}
+
+.login-btn {
+    height: 40px;
+    width: 40px;
+    border: none;
+    border-radius: 50%;
+    background-color: rgba(92, 107, 192, 0.85);
+    color: white;
+    font-size: 18px;
+    cursor: pointer;
     display: flex;
-    gap: 4px;
-    font-size: 20px;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.login-btn:hover {
+    background-color: rgba(92, 107, 192, 1);
+    transform: scale(1.06);
+}
+
+.login-hint {
+    margin-top: 14px;
+    background: none;
+    border: none;
+    color: rgba(224, 224, 224, 0.6);
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: underline;
+    transition: color 0.15s ease;
+}
+
+.login-hint:hover {
+    color: #e0e0e0;
+}
+
+.login-hint-text {
+    margin-top: 10px;
+    padding: 10px 16px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 8px;
+    font-size: 14px;
+    color: #e0e0e0;
+    animation: hintFadeIn 0.2s ease-out;
+}
+
+@keyframes hintFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.login-clock {
+    position: absolute;
+    bottom: 30px;
+    right: 40px;
+    text-align: right;
+    cursor: default;
 }
 
 .time {
-    font-size: 30px;
+    font-size: 34px;
     font-weight: 200;
+    line-height: 1;
 }
 
+.date-day {
+    margin-top: 6px;
+    font-size: 15px;
+    opacity: 0.75;
+}
 
 .login-animation-overlay {
     width: 100vw;
     height: 100vh;
-    position:fixed;
+    position: fixed;
     top: 0;
     left: 0;
-    background-color: #001c3b;;
+    background-color: #001c3b;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -146,9 +231,4 @@
     border-radius: 2px;
     transition: width 0.1s linear;
     box-shadow: 0 0 10px rbga(23, 147, 209, 0.5);
-}
-
-
-.login-screen {
-    position: relative;
 }

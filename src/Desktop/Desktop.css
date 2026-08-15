@@ -17,58 +17,100 @@
 .taskbar {
     display: flex;
     justify-content: center;
-    flex-direction: row;
+    align-items: center;
+    gap: 10px;
     margin-top: auto;
-    align-items: center;
-    background-color: #000710c1;
-    padding: 10px;
-    width: 30vw;
-    border-radius: 20px;
-}
-
-
-
-
-.firefox {
-    height: 50px;
-}
-
-
-.terminal {
-    height: 30px;
-}
-
-.file {
-    padding-left: 20px;
-    height: 40px;
-}
-
-.arch {
-    height: 30px;
-}
-
-.taskbar ul {
-    display: flex;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    gap: 20px;
-    align-items: center;
+    width: 100%;
+    padding: 8px 18px;
+    background-color: rgba(0, 7, 16, 0.8);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    box-shadow: 0 -1px 8px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    position: relative;
 }
 
 .taskbar-btn {
     background: none;
     border: none;
-    padding: 0;
+    padding: 6px;
     cursor: pointer;
     display: flex;
     align-items: center;
-    border-radius: 8px;
-    transition: background-color 0.15s ease;
+    justify-content: center;
+    border-radius: 10px;
+    transition: background-color 0.15s ease, transform 0.15s ease;
+    position: relative;
 }
 
 .taskbar-btn:hover {
-    background-color: rgba(255, 255, 255, 0.15);
+    background-color: rgba(255, 255, 255, 0.12);
+}
+
+.taskbar-btn:active {
+    transform: scale(0.92);
+}
+
+.tb-arch {
+    height: 30px;
+}
+
+.tb-firefox {
+    height: 50px;
+}
+
+.tb-terminal {
+    height: 30px;
+}
+
+.tb-settings {
+    height: 40px;
+}
+
+.taskbar-btn.active {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
+.taskbar-btn.active::after {
+    content: '';
+    position: absolute;
+    bottom: 2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 8px;
+    height: 3px;
+    border-radius: 2px;
+    background-color: #5c6bc0;
+}
+
+.taskbar-clock {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    line-height: 1.2;
+    padding: 4px 8px;
+    border-radius: 8px;
+    cursor: default;
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.taskbar-clock:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.tb-time {
+    font-size: 14px;
+    font-weight: 500;
+    color: #e0e0e0;
+}
+
+.tb-date {
+    font-size: 12px;
+    color: rgba(224, 224, 224, 0.7);
 }
 
 
