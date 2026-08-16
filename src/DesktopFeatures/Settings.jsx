@@ -109,7 +109,7 @@ const Settings = ({onClose}) => {
     }
 
     return (
-        <Draggable nodeRef={nodeRef} handle='.settings-header' defaultPosition={{x: 100, y: -100}}>
+        <Draggable bounds="parent" nodeRef={nodeRef} handle='.settings-header' defaultPosition={{x: 100, y: -100}}>
             <div ref={nodeRef} className="settings-window">
                 <div className="settings-header">
                     <div className="settings-title">Settings</div>

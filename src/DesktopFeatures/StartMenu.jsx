@@ -52,7 +52,7 @@ const StartMenu = ({onClick, onOpenFirefox, onOpenTerminal, onOpenNotepad}) => {
                             className="app-item"
                             onClick={(e) => handleAppClick(e, app.open)}
                         >
-                            <img src={app.icon} alt={app.name} className="app-item-icon" />
+                            <img src={app.icon} alt={app.name} className={`app-item-icon app-${app.name.toLowerCase()}`} />
                             <span>{app.name}</span>
                         </button>
                     ))}

@@ -182,8 +182,20 @@
 
 .app-item-icon {
     height: 28px;
-    width: 28px;
     object-fit: contain;
+}
+
+.app-firefox {
+    height: 50px;
+    margin-left: -25px;
+}
+
+.app-terminal {
+    height: 30px;
+}
+
+.app-notepad {
+    height: 32px;
 }
 
 .no-apps {

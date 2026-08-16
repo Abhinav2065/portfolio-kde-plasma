@@ -91,7 +91,7 @@ npm run build
 ## Author
 
 Abhinav Siluwal
-abhinavsl511@gmail.com
+abhinavsl@proton.me
 
 
 

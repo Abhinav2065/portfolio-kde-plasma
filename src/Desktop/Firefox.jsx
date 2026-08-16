@@ -125,7 +125,7 @@ const Firefox = ({onClose}) => {
 
 
   return (
-    <Draggable nodeRef={nodeRef} handle='.firefox-tabstrip' defaultPosition={{x:100, y:50}} >
+    <Draggable bounds="parent" nodeRef={nodeRef} handle='.firefox-tabstrip' defaultPosition={{x:100, y:50}} >
         <div ref={nodeRef} className="firefox-window">
             <div className="firefox-tabstrip">
                 <div className="tabs-container">

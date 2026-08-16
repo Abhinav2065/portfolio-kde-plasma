@@ -1,65 +1,144 @@
 .terminal-window {
-    height: 800px;
-    width: 1200px;
-    background-color: rgba(42, 42, 42, 0.869);
-    border-radius: 5px;
+    height: 560px;
+    width: 860px;
+    background: linear-gradient(180deg, #1e1e24 0%, #17171b 100%);
+    border: 1px solid #2e2e36;
+    border-radius: 10px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
     position: absolute;
     z-index: 9999;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
 }
 
 
 .terminal-header {
-    background-color: rgba(0, 0, 0, 0.869);
-    padding: 8px 12px;
+    background-color: #121216;
+    padding: 0 8px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #555;
+    border-bottom: 1px solid #2e2e36;
     cursor: grab;
     pointer-events: auto;
+    height: 34px;
+    flex-shrink: 0;
 }
 
 .terminal-header:active {
     cursor: grabbing;
 }
 
-.terminal-title {
-    color: #ddd;
-    font-weight: bold;
+.terminal-tabs {
+    display: flex;
+    align-items: flex-end;
+    align-self: stretch;
+    gap: 4px;
+    overflow-x: auto;
+    flex: 1;
+    min-width: 0;
+}
+
+.terminal-tab {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+    color: #6b6b76;
+    font-size: 13px;
+    height: 100%;
+    border-top: 2px solid transparent;
+    user-select: none;
+    white-space: nowrap;
+    cursor: pointer;
+    max-width: 180px;
+}
+
+.terminal-tab:hover {
+    color: #a8a8b3;
+}
+
+.terminal-tab.active {
+    color: #e6e6ea;
+    background: linear-gradient(180deg, #1e1e24, #17171b);
+    border-top: 2px solid #40d672;
+    border-radius: 6px 6px 0 0;
+}
+
+.tab-cat {
     font-size: 14px;
+}
+
+.tab-title {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.tab-close {
+    background: none;
+    border: none;
+    color: #6b6b76;
+    font-size: 14px;
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.tab-close:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #e6e6ea;
+}
+
+.new-tab-btn {
+    background: none;
+    border: none;
+    color: #6b6b76;
+    font-size: 18px;
+    line-height: 1;
+    padding: 0 10px;
+    height: 100%;
+    cursor: pointer;
+    border-radius: 6px;
+}
+
+.new-tab-btn:hover {
+    background-color: rgba(255, 255, 255, 0.12);
+    color: #e6e6ea;
 }
 
 .terminal-close button {
     background: none;
     border: none;
-    color: #ddd;
+    color: #6b6b76;
     cursor: pointer;
-    font-size: 16px;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
+    font-size: 13px;
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    transition: background-color 0.15s ease, color 0.15s ease;
 }
 
 
 .terminal-close button:hover {
-    background-color: #8f8f8f;
+    background-color: #e5534b;
     color: white;
 }
 
 
 .terminal-body {
     flex: 1;
-    padding: 10px;
+    padding: 12px 14px;
     overflow-y: auto;
-    color: #f0f0f0;
-    font-size: 14px;
-    line-height: 1.4;
+    color: #d9d9de;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, Menlo, Consolas, monospace;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
 
@@ -81,9 +160,25 @@
     align-items: center;
 }
 
-.prompt {
-    color: #00ff00;
-    margin-right: 5px;
+.prompt-user {
+    color: #40d672;
+    font-weight: 600;
+    user-select: none;
+}
+
+.prompt-colon {
+    color: #d9d9de;
+    user-select: none;
+}
+
+.prompt-path {
+    color: #7aa2f7;
+    user-select: none;
+}
+
+.prompt-dollar {
+    color: #e0af68;
+    margin: 0 8px 0 4px;
     user-select: none;
 }
 
@@ -91,10 +186,11 @@
     background: transparent;
     border: none;
     outline: none;
-    color: #f0f0f0;
-    font-size: 14px;
+    color: #d9d9de;
+    font-family: inherit;
+    font-size: inherit;
     flex: 1;
-    caret-color: #f0f0f0;
+    caret-color: #40d672;
     pointer-events: auto;
 }
 
@@ -103,10 +199,10 @@
 }
 
 .command .output-content {
-    color: #f0f0f0;
+    color: #d9d9de;
 }
 
 .output .output-content {
-    color: #ccc;
+    color: #a8a8b3;
+    white-space: pre-wrap;
 }
-

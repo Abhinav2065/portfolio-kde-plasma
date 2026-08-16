@@ -1,6 +1,5 @@
 import React, { useRef, useState, useMemo } from 'react'
 import notepad from '../assets/notepad.png'
-import Notepad from './Notepad';
 import Draggable from 'react-draggable';
 
 const defaultIcons = [
@@ -22,7 +21,7 @@ const defaultIcons = [
       name:'Links', 
       x: 220, 
       y: 420, 
-      content:'My github: https://github.com/Abhinav2065,\nMy LinkedIn: https://www.linkedin.com/in/abhinavsl/,\nMy Email: abhinavsl511@gmail.com'},
+      content:'My github: https://github.com/Abhinav2065,\nMy LinkedIn: https://www.linkedin.com/in/abhinavsl/,\nMy Email: abhinavsl@proton.me'},
     {
       id:4,
       name:'passwords',
@@ -46,7 +45,7 @@ const loadPositions = () => {
     }
 }
 
-const Icons = () => {
+const Icons = ({ onOpenNotepad }) => {
   const [icons, setIcons] = useState(() => {
     const saved = loadPositions();
     if (!saved) return defaultIcons;
@@ -54,9 +53,6 @@ const Icons = () => {
         saved[icon.id] ? {...icon, x: saved[icon.id].x, y: saved[icon.id].y} : icon
     );
   });
-
-  const [openNotepad, setOpenNotepad] = useState(null);
-
 
   const itemRefs = useMemo(() => {
     return icons.map(() => React.createRef());
@@ -67,11 +63,7 @@ const Icons = () => {
   
   const handleDoubleClick = (icon) => {
     console.log('DoubleClicked', icon);
-    setOpenNotepad(icon);
-  }
-
-  const handleCloseNotepad = () => {
-    setOpenNotepad(null);
+    onOpenNotepad(icon);
   }
 
   const handleStop = (e, data, id) => {
@@ -99,6 +91,7 @@ const Icons = () => {
 
             {icons.map((icon, index)=> (
               <Draggable
+                bounds="parent"
                 key={icon.id}
                 defaultPosition={{x: icon.x, y: icon.y}}
                 onStop={(e, data) => handleStop(e, data, icon.id)}
@@ -126,14 +119,6 @@ const Icons = () => {
             ))}
             
         </div>
-
-            {openNotepad && (
-              <Notepad
-                title={openNotepad.name}
-                content={openNotepad.content}
-                onClose={handleCloseNotepad}
-              />
-            )}
     </div>
   )
 }

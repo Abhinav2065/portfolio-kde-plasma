@@ -3,6 +3,7 @@ import './Desktop.css'
 import firefox from '../assets/firefox.png'
 import terminal from '../assets/terminal.png'
 import arch from '../assets/arch.png'
+import notepadImg from '../assets/notepad.png'
 import Terminal from '../terminal/Terminal'
 import Icons from './Icons'
 import settings from '../assets/settings.png'
@@ -19,7 +20,7 @@ const Desktop = () => {
   const [showStartMenu, setShowStartMenu] = useState(false);
   const [showFirefox, setShowFirefox] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
-  const [showNotepad, setShowNotepad] = useState(false);
+  const [notepad, setNotepad] = useState(null);
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -94,11 +95,15 @@ const Desktop = () => {
       e.preventDefault();
       e.stopPropagation();
     }
-    setShowNotepad(true);
+    setNotepad({ name: 'Notepad', content: 'Welcome to my portfolio desktop! Double-click the desktop icons to read about me, my projects, and my links.' });
+  }
+
+  const handleIconNotepadOpen = (icon) => {
+    setNotepad({ name: icon.name, content: icon.content });
   }
 
   const handleNotepadClose = () => {
-    setShowNotepad(false);
+    setNotepad(null);
   }
 
   return (
@@ -106,14 +111,14 @@ const Desktop = () => {
        <div className="desktop" onClick={handleDesktopClick}>
             {showterminal && <Terminal onClose={handleTerminalClose}/>}
             {showFirefox && <Firefox onClose={handleFirefoxClose} />}
-            {showNotepad && (
+            {notepad && (
               <Notepad
-                title="Notepad"
-                content="Welcome to my portfolio desktop! Double-click the desktop icons to read about me, my projects, and my links."
+                title={notepad.name}
+                content={notepad.content}
                 onClose={handleNotepadClose}
               />
             )}
-           <Icons></Icons>
+           <Icons onOpenNotepad={handleIconNotepadOpen}></Icons>
 
           {showStartMenu && (
             <StartMenu
@@ -140,6 +145,9 @@ const Desktop = () => {
                     </button>
                     <button type="button" className={`taskbar-btn ${showSettings ? 'active' : ''}`} onClick={handleSettingsOpen} title="Settings">
                         <img src={settings} alt="Settings" className='tb-settings' />
+                    </button>
+                    <button type="button" className={`taskbar-btn ${notepad ? 'active' : ''}`} onClick={handleNotepadOpen} title="Notepad">
+                        <img src={notepadImg} alt="Notepad" className='tb-notepad' />
                     </button>
 
                     <div className="taskbar-clock">
