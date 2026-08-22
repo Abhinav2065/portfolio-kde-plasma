@@ -117,15 +117,18 @@
     line-height: 1.2;
     padding: 4px 8px;
     border-radius: 8px;
-    cursor: default;
+    cursor: pointer;
     position: absolute;
     right: 18px;
     top: 50%;
     transform: translateY(-50%);
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    user-select: none;
 }
 
-.taskbar-clock:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+.taskbar-clock:hover,
+.taskbar-clock.active {
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 .tb-time {

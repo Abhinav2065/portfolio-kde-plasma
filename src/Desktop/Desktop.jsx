@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Desktop.css'
 import firefox from '../assets/firefox.png'
 import terminal from '../assets/terminal.png'
@@ -12,14 +13,17 @@ import Firefox from './Firefox'
 import StartMenu from '../DesktopFeatures/StartMenu'
 import Settings from '../DesktopFeatures/Settings'
 import Notepad from './Notepad'
+import Calendar from '../DesktopFeatures/Calendar'
 
 
 const Desktop = () => {
+  const navigate = useNavigate();
 
   const [showterminal, setShowTerminal] = useState(false);
   const [terminalMinimized, setTerminalMinimized] = useState(false);
 
   const [showStartMenu, setShowStartMenu] = useState(false);
+  const [showCalendar, setShowCalendar] = useState(false);
 
   const [showFirefox, setShowFirefox] = useState(false);
   const [firefoxMinimized, setFirefoxMinimized] = useState(false);
@@ -159,11 +163,21 @@ const Desktop = () => {
   const handleStartButtonClick = (e) => {
     e.stopPropagation();
     setShowStartMenu(prev => !prev);
+    setShowCalendar(false);
+  }
+
+  const handleClockClick = (e) => {
+    e.stopPropagation();
+    setShowCalendar(prev => !prev);
+    setShowStartMenu(false);
   }
 
   const handleDesktopClick = () => {
     if (showStartMenu) {
       setShowStartMenu(false);
+    }
+    if (showCalendar) {
+      setShowCalendar(false);
     }
   }
 
@@ -299,6 +313,10 @@ const Desktop = () => {
             />
           )}
 
+          {showCalendar && (
+            <Calendar onClose={() => setShowCalendar(false)} />
+          )}
+
           {showSettings && (
             <Settings
               onClose={handleSettingsClose}
@@ -327,7 +345,11 @@ const Desktop = () => {
                         <img src={notepadImg} alt="Notepad" className='tb-notepad' />
                     </button>
 
-                    <div className="taskbar-clock">
+                    <div
+                      className={`taskbar-clock ${showCalendar ? 'active' : ''}`}
+                      onClick={handleClockClick}
+                      title="Calendar & Clock"
+                    >
                         <span className="tb-time">{timeString}</span>
                         <span className="tb-date">{dateString}</span>
                     </div>

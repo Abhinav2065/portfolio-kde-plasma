@@ -473,3 +473,366 @@
         transform: translateX(0);
     }
 }
+
+/* ==========================================================================
+   KDE Plasma 6 Breeze Desktop Calendar Styles
+   ========================================================================== */
+
+.kde-calendar-window {
+    position: fixed;
+    bottom: 72px;
+    right: 14px;
+    width: 328px;
+    max-height: calc(100vh - 90px);
+    background-color: rgba(30, 32, 40, 0.96);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 10px 32px rgba(0, 0, 0, 0.65), 0 0 1px rgba(255, 255, 255, 0.15);
+    overflow: hidden;
+    z-index: 100000;
+    user-select: none;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
+    color: #e0e0e0;
+    animation: kdeCalFadeIn 0.15s cubic-bezier(0.1, 0.9, 0.2, 1) forwards;
+}
+
+@keyframes kdeCalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(6px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Header */
+.kde-cal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+    background-color: rgba(255, 255, 255, 0.02);
+}
+
+.kde-cal-title-btn {
+    background: none;
+    border: none;
+    color: #ffffff;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: background-color 0.12s ease;
+}
+
+.kde-cal-title-btn:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.kde-cal-chevron {
+    font-size: 10px;
+    color: #8a8f9d;
+}
+
+.kde-cal-decade-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #ffffff;
+    padding: 4px 6px;
+}
+
+.kde-cal-controls {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
+.kde-cal-btn-today {
+    background-color: transparent;
+    border: 1px solid rgba(61, 174, 233, 0.4);
+    color: #3daee9;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-right: 4px;
+    transition: all 0.12s ease;
+}
+
+.kde-cal-btn-today:hover {
+    background-color: rgba(61, 174, 233, 0.2);
+    color: #ffffff;
+}
+
+.kde-cal-nav-btn {
+    background: none;
+    border: none;
+    color: #c5c8d4;
+    font-size: 16px;
+    line-height: 1;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.12s ease, color 0.12s ease;
+}
+
+.kde-cal-nav-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+/* Body & Weekdays */
+.kde-cal-body {
+    padding: 8px 10px 6px;
+}
+
+.kde-cal-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-size: 11px;
+    font-weight: 600;
+    color: #7b8090;
+    margin-bottom: 4px;
+    padding: 0 2px;
+}
+
+.kde-cal-weekday.weekend {
+    color: #d16969;
+}
+
+/* Days Grid */
+.kde-cal-days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 2px;
+}
+
+.kde-cal-day {
+    position: relative;
+    height: 32px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    color: #e2e4ec;
+    font-size: 12px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.1s ease, border-color 0.1s ease;
+    padding: 0;
+}
+
+.kde-cal-day:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+}
+
+.kde-cal-day.other-month {
+    color: #555966;
+}
+
+.kde-cal-day.today {
+    border-color: #3daee9;
+    font-weight: 700;
+    color: #3daee9;
+    background-color: rgba(61, 174, 233, 0.1);
+}
+
+.kde-cal-day.selected {
+    background-color: #3daee9 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+.kde-cal-day.selected .kde-cal-event-dot {
+    background-color: #ffffff;
+}
+
+.kde-cal-event-dot {
+    position: absolute;
+    bottom: 3px;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background-color: #3daee9;
+}
+
+/* Month & Year Picker Grids */
+.kde-cal-picker-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    padding: 10px 4px;
+}
+
+.kde-cal-picker-tile {
+    height: 46px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+    color: #e2e4ec;
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.12s ease;
+}
+
+.kde-cal-picker-tile:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+}
+
+.kde-cal-picker-tile.other-month {
+    color: #555966;
+}
+
+.kde-cal-picker-tile.today {
+    border-color: #3daee9;
+    color: #3daee9;
+}
+
+.kde-cal-picker-tile.selected {
+    background-color: #3daee9 !important;
+    color: #ffffff !important;
+    font-weight: 600;
+}
+
+/* Agenda / Events */
+.kde-cal-agenda {
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 8px 12px 10px;
+}
+
+.kde-cal-agenda-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+}
+
+.kde-cal-agenda-date {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #abb0c0;
+}
+
+.kde-cal-add-btn {
+    background: none;
+    border: none;
+    color: #3daee9;
+    font-size: 11px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 1px 4px;
+    border-radius: 3px;
+    transition: background-color 0.1s ease;
+}
+
+.kde-cal-add-btn:hover {
+    background-color: rgba(61, 174, 233, 0.15);
+}
+
+.kde-cal-event-form {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 6px;
+}
+
+.kde-cal-event-input {
+    flex: 1;
+    background-color: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 3px 6px;
+    font-size: 11px;
+    color: #ffffff;
+    outline: none;
+}
+
+.kde-cal-event-input:focus {
+    border-color: #3daee9;
+}
+
+.kde-cal-event-submit {
+    background-color: #3daee9;
+    border: none;
+    border-radius: 4px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 0 8px;
+    cursor: pointer;
+}
+
+.kde-cal-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    max-height: 80px;
+    overflow-y: auto;
+}
+
+.kde-cal-event-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 2px 4px;
+    border-radius: 3px;
+    background-color: rgba(255, 255, 255, 0.04);
+    font-size: 11px;
+    color: #d1d4e0;
+}
+
+.kde-cal-event-badge {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #3daee9;
+    flex-shrink: 0;
+}
+
+.kde-cal-event-title {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.kde-cal-event-del {
+    background: none;
+    border: none;
+    color: #7b8090;
+    font-size: 10px;
+    cursor: pointer;
+    padding: 0 2px;
+    line-height: 1;
+}
+
+.kde-cal-event-del:hover {
+    color: #e06c75;
+}
+
+.kde-cal-no-events {
+    font-size: 11px;
+    color: #656978;
+    padding: 2px 0;
+}

@@ -48,3 +48,51 @@
 .boot-screen {
     overflow-y: auto;
 }
+
+.power-off-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: #000000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999999;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+}
+
+.power-off-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: rgba(255, 255, 255, 0.3);
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    font-size: 13px;
+    transition: color 0.3s ease, transform 0.3s ease;
+    animation: pulsePower 3s ease-in-out infinite;
+}
+
+.power-off-screen:hover .power-off-hint {
+    color: rgba(255, 255, 255, 0.75);
+    transform: scale(1.04);
+}
+
+.power-off-icon {
+    font-size: 32px;
+    color: rgba(255, 255, 255, 0.4);
+    transition: color 0.3s ease;
+}
+
+.power-off-screen:hover .power-off-icon {
+    color: #3daee9;
+}
+
+@keyframes pulsePower {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 0.75; }
+}
