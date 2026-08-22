@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Draggable from 'react-draggable';
 import './Terminal.css';
 
@@ -153,11 +153,111 @@ const FILE_SYSTEM = createFileSystem();
 const COMMANDS = [
   'help', 'clear', 'ls', 'pwd', 'cd', 'cat', 'date', 'echo',
   'firefox', 'fastfetch', 'neofetch', 'whoami', 'uname', 'uptime', 'history',
-  'mkdir', 'touch', 'rm', 'sudo', 'pacman', 'kitty', 'exit'
+  'cmatrix', 'matrix', 'sl', 'cowsay', 'cowthink', 'fortune', 'cbonsai', 'bonsai',
+  'htop', 'btop', 'top', 'figlet', 'pacman', 'sudo', 'mkdir', 'touch', 'rm', 'exit'
 ];
 
 const GIT_COMMANDS = ['status', 'commit', 'push', 'pull', 'branch', 'checkout', 'log', 'diff', 'add'];
 const PACMAN_FLAGS = ['-S', '-Syu', '-R', '-Q', '-Ss', '-Scc', 'install', 'update'];
+
+const FORTUNES = [
+  '"Talk is cheap. Show me the code." — Linus Torvalds',
+  '"There are only 10 types of people in the world: those who understand binary, and those who don\'t."',
+  '"Software is like sex: it\'s better when it\'s free." — Linus Torvalds',
+  '"I\'d like to interject for a moment. What you\'re referring to as Linux, is in fact, GNU/Linux..." — Richard Stallman',
+  '"In a world without walls and fences, who needs Windows and Gates?"',
+  '"sudo make me a sandwich." -> "Okay."',
+  '"A computer is like air conditioning: it becomes useless when you open Windows."',
+  '"The only truly secure system is one that is powered off, cast in a block of concrete and sealed in a room with armed guards." — Gene Spafford',
+  '"Arch BTW."',
+  '"There is no place like /home/ablag."',
+  '"Simplicity is prerequisite for reliability." — Edsger W. Dijkstra',
+  '"Measuring programming progress by lines of code is like measuring aircraft building progress by weight." — Bill Gates'
+];
+
+// Helper to make ASCII cowsay
+const makeCow = (text, isThink = false) => {
+  const line = text || 'Arch Linux is the way.';
+  const len = Math.max(line.length, 10);
+  const border = '-'.repeat(len + 2);
+  if (isThink) {
+    return ` ( ${line} )
+ ${border}
+        o   ^__^
+         o  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
+  }
+  return ` < ${line} >
+ ${border}
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
+};
+
+// Bonsai Tree Generator
+const getBonsaiTree = () => {
+  return `
+       &&& &&  & &&
+    && &\\/&\\|& ()|/ @, &&
+    &\\/(/&/&||/& /_/)_&/_&
+ &() &\\/&|()|/&\\/ '% & ()
+&_\\_&&_\\ |& |&&/&__%_/_& &&
+&&   && & &| &| /& & % ()& /&&
+ ()&_---()&\\&\\|&&-&&--%---()~
+     &&     \\|||
+             |||
+             |||
+             |||
+       .     |||
+      / \\  . |||
+     (___)` + ' `---´\n' +
+`    ~~~~~~~~~~~~~~~~~~~~~~~
+      [ Arch Bonsai Garden ]`;
+};
+
+// Figlet generator
+const getFiglet = (text) => {
+  const t = (text || 'ARCH').toUpperCase().slice(0, 10);
+  if (t === 'ARCH') {
+    return `
+    _              _     
+   / \\   _ __ ___ | |__  
+  / _ \\ | '__/ __|| '_ \\ 
+ / ___ \\| | | (__ | | | |
+/_/   \\_\\_|  \\___||_| |_|
+    `;
+  }
+  if (t === 'KDE') {
+    return `
+ _  ______  _____ 
+| |/ /  _ \\| ____|
+| ' /| | | |  _|  
+| . \\| |_| | |___ 
+|_|\\_\\____/|_____|
+    `;
+  }
+  if (t === 'LINUX') {
+    return `
+ _     ___ _   _ _   ___  __
+| |   |_ _| \\ | | | | \\ \\/ /
+| |    | ||  \\| | | | |\\  / 
+| |___ | || |\\  | |_| |/  \\ 
+|_____|___|_| \\_|\\___//_/\\_\\
+    `;
+  }
+  return `
+ _   _ _____ _     _     ___  
+| | | | ____| |   | |   / _ \\ 
+| |_| |  _| | |   | |  | | | |
+|  _  | |___| |___| |__| |_| |
+|_| |_|_____|_____|_____\\___/ 
+  :: ${t} ::
+`;
+};
 
 // Helper to resolve directory in virtual FS
 function getDirectoryNode(cwd) {
@@ -230,6 +330,391 @@ function getLongestCommonPrefix(strings) {
   return prefix;
 }
 
+// Matrix Digital Rain Component — authentic continuous cmatrix digital rain
+const MatrixRain = React.memo(({ onExit }) => {
+  const canvasRef = useRef(null);
+  const onExitRef = useRef(onExit);
+  onExitRef.current = onExit;
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const parent = canvas.parentElement;
+    if (!parent) return;
+
+    const ctx = canvas.getContext('2d');
+    const fontSize = 16;
+
+    const width = (canvas.width = parent.clientWidth || 800);
+    const height = (canvas.height = parent.clientHeight || 500);
+
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz@#$%&*<>~;:|+-=';
+    const columns = Math.floor(width / fontSize);
+    const totalRows = Math.floor(height / fontSize);
+
+    // Initialize all columns starting from the top ceiling
+    const drops = Array.from({ length: columns }, () => -Math.floor(Math.random() * 8));
+    // Asynchronous column speeds (frames per row advance) to break synchronization
+    const speeds = Array.from({ length: columns }, () => Math.floor(Math.random() * 2) + 1);
+    const counters = Array.from({ length: columns }, () => 0);
+
+    // Fill initial black screen
+    ctx.fillStyle = '#000000';
+    ctx.fillRect(0, 0, width, height);
+
+    let animId;
+    let lastTime = 0;
+
+    const draw = (time) => {
+      animId = requestAnimationFrame(draw);
+      if (time - lastTime < 33) return; // 30 FPS classic cmatrix pace
+      lastTime = time;
+
+      // Translucent black overlay creates the authentic fading green trail
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.07)';
+      ctx.fillRect(0, 0, width, height);
+
+      ctx.font = `bold ${fontSize}px monospace`;
+
+      for (let i = 0; i < columns; i++) {
+        const row = drops[i];
+        const x = i * fontSize;
+        const y = row * fontSize;
+
+        if (row >= 0 && y <= height + fontSize) {
+          // Leading white head character with green bloom
+          const headChar = chars[Math.floor(Math.random() * chars.length)];
+          ctx.fillStyle = '#ffffff';
+          ctx.shadowColor = '#00ff41';
+          ctx.shadowBlur = 8;
+          ctx.fillText(headChar, x, y);
+          ctx.shadowBlur = 0;
+
+          // Trailing green character
+          if (row > 0) {
+            const bodyChar = chars[Math.floor(Math.random() * chars.length)];
+            ctx.fillStyle = '#00ff41';
+            ctx.fillText(bodyChar, x, y - fontSize);
+          }
+        }
+
+        // Asynchronous frame advance per column
+        counters[i]++;
+        if (counters[i] >= speeds[i]) {
+          counters[i] = 0;
+          if (y > height) {
+            // Re-enter with dynamic randomized negative offset and new speed for zero periodicity
+            drops[i] = -Math.floor(Math.random() * 6);
+            speeds[i] = Math.floor(Math.random() * 2) + 1;
+          } else {
+            drops[i]++;
+          }
+        }
+      }
+    };
+
+    animId = requestAnimationFrame(draw);
+
+    const handleKey = (e) => {
+      if (e.key === 'q' || e.key === 'Escape' || (e.ctrlKey && e.key === 'c')) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (onExitRef.current) {
+          onExitRef.current();
+        }
+      }
+    };
+    window.addEventListener('keydown', handleKey, true);
+
+    return () => {
+      cancelAnimationFrame(animId);
+      window.removeEventListener('keydown', handleKey, true);
+    };
+  }, []);
+
+  const handleClick = () => {
+    if (onExitRef.current) {
+      onExitRef.current();
+    }
+  };
+
+  return (
+    <div className="cmatrix-overlay" onClick={handleClick}>
+      <canvas ref={canvasRef} className="cmatrix-canvas" />
+      <div className="cmatrix-hint">Press [q] or click to exit</div>
+    </div>
+  );
+});
+
+// Steam Locomotive Component
+const SteamLocomotive = () => {
+  const trainAscii = `
+      (  ) (@@) ( )  (@)  ()    @@    O     @     O     @
+  (@@@)
+ (    )
+(@@@@)
+
+ (   )
+    ====        ________                ___________
+_D _|  |_______/        \\__I_I_____===__|_________|
+   |(_)---  |   H\\________/ |   |        =|___ ___|
+   /     |  |   H  |  |     |   |         ||_| |_||
+  |      |  |   H  |__--------------------|___ ___|
+  | ________|___H__/__|_____/[][]~\\_______|       |
+  |/ |   |_____I_____I_____I_____I_____I_____I_____I|
+__/ =| o |=-~~\\  /~~\\  /~~\\  /~~\\  /~~\\  /~~\\  /~~\\  |_____
+ |/-=|___|=O=====O=====O=====O=====O=====O=====O=====O|      \\
+  \\_/      \\__/  \\__/  \\__/  \\__/  \\__/  \\__/  \\__/  \\__/     \\
+  `;
+
+  return (
+    <div className="sl-track">
+      <div className="sl-train">{trainAscii}</div>
+    </div>
+  );
+};
+
+// Interactive Fullscreen HTop Component
+const HTopMonitor = React.memo(({ onExit }) => {
+  const [ticks, setTicks] = useState(0);
+  const onExitRef = useRef(onExit);
+  onExitRef.current = onExit;
+
+  useEffect(() => {
+    const timer = setInterval(() => setTicks(t => t + 1), 1000);
+    const handleKey = (e) => {
+      if (e.key === 'q' || e.key === 'Escape' || (e.ctrlKey && e.key === 'c')) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (onExitRef.current) onExitRef.current();
+      }
+    };
+    window.addEventListener('keydown', handleKey, true);
+    return () => {
+      clearInterval(timer);
+      window.removeEventListener('keydown', handleKey, true);
+    };
+  }, []);
+
+  const cpuVals = [
+    Math.floor(22 + Math.sin(ticks * 0.8) * 12 + 10),
+    Math.floor(18 + Math.cos(ticks * 0.7) * 15 + 10),
+    Math.floor(28 + Math.sin(ticks * 0.9) * 10 + 10),
+    Math.floor(15 + Math.cos(ticks * 0.6) * 12 + 10),
+    Math.floor(32 + Math.sin(ticks * 1.1) * 14 + 10),
+    Math.floor(20 + Math.cos(ticks * 0.8) * 10 + 10),
+    Math.floor(25 + Math.sin(ticks * 0.5) * 12 + 10),
+    Math.floor(30 + Math.cos(ticks * 1.0) * 15 + 10)
+  ];
+
+  const renderBar = (percent) => {
+    const total = 22;
+    const filled = Math.round((percent / 100) * total);
+    return `[${'|'.repeat(filled)}${' '.repeat(Math.max(0, total - filled))}] ${percent}%`;
+  };
+
+  const uptimeMinutes = 142 + Math.floor(ticks / 60);
+  const uptimeHours = Math.floor(uptimeMinutes / 60);
+  const uptimeRemMin = uptimeMinutes % 60;
+
+  return (
+    <div className="htop-container">
+      {/* Top Resource Meters */}
+      <div className="htop-header-grid">
+        <div className="htop-col">
+          {cpuVals.slice(0, 4).map((v, i) => (
+            <div key={i} className="htop-meter-row">
+              <span className="htop-meter-label">{i + 1}</span>
+              <span className="htop-meter-bar">{renderBar(v)}</span>
+            </div>
+          ))}
+          <div className="htop-meter-row">
+            <span className="htop-meter-label" style={{ color: '#c678dd' }}>Mem</span>
+            <span className="htop-meter-bar" style={{ color: '#c678dd' }}>
+              [||||||||||          ] 4.38G/15.36G
+            </span>
+          </div>
+          <div className="htop-meter-row">
+            <span className="htop-meter-label" style={{ color: '#56b6c2' }}>Swp</span>
+            <span className="htop-meter-bar" style={{ color: '#56b6c2' }}>
+              [                    ] 0K/4.00G
+            </span>
+          </div>
+        </div>
+
+        <div className="htop-col">
+          {cpuVals.slice(4, 8).map((v, i) => (
+            <div key={i} className="htop-meter-row">
+              <span className="htop-meter-label">{i + 5}</span>
+              <span className="htop-meter-bar">{renderBar(v)}</span>
+            </div>
+          ))}
+          <div className="htop-meter-row">
+            <span className="htop-meter-label" style={{ color: '#e5c07b' }}>Tasks</span>
+            <span style={{ color: '#d9d9de' }}>132, 428 thr; 1 running</span>
+          </div>
+          <div className="htop-meter-row">
+            <span className="htop-meter-label" style={{ color: '#98c379' }}>Load</span>
+            <span style={{ color: '#d9d9de' }}>0.34 0.28 0.31 | Uptime: {uptimeHours}h {uptimeRemMin}m</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Process Table */}
+      <div className="htop-table-wrapper">
+        <table className="htop-table">
+          <thead>
+            <tr>
+              <th>PID</th>
+              <th>USER</th>
+              <th>PRI</th>
+              <th>NI</th>
+              <th>VIRT</th>
+              <th>RES</th>
+              <th>SHR</th>
+              <th>S</th>
+              <th>CPU%</th>
+              <th>MEM%</th>
+              <th>TIME+</th>
+              <th>Command</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>842</td>
+              <td>ablag</td>
+              <td>20</td>
+              <td>0</td>
+              <td>2.4G</td>
+              <td>184M</td>
+              <td>92M</td>
+              <td>S</td>
+              <td style={{ color: '#98c379', fontWeight: 600 }}>4.8</td>
+              <td>3.8</td>
+              <td>0:42.18</td>
+              <td className="htop-cmd">/usr/bin/kwin_wayland --wayland-fd 7</td>
+            </tr>
+            <tr>
+              <td>1204</td>
+              <td>ablag</td>
+              <td>20</td>
+              <td>0</td>
+              <td>4.1G</td>
+              <td>420M</td>
+              <td>180M</td>
+              <td>S</td>
+              <td style={{ color: '#98c379', fontWeight: 600 }}>3.5</td>
+              <td>8.4</td>
+              <td>2:14.05</td>
+              <td className="htop-cmd">/usr/lib/firefox/firefox</td>
+            </tr>
+            <tr>
+              <td>1412</td>
+              <td>ablag</td>
+              <td>20</td>
+              <td>0</td>
+              <td>840M</td>
+              <td>92M</td>
+              <td>45M</td>
+              <td>S</td>
+              <td style={{ color: '#98c379', fontWeight: 600 }}>2.1</td>
+              <td>1.9</td>
+              <td>0:12.33</td>
+              <td className="htop-cmd">/usr/bin/kitty</td>
+            </tr>
+            <tr>
+              <td>910</td>
+              <td>ablag</td>
+              <td>20</td>
+              <td>0</td>
+              <td>1.2G</td>
+              <td>140M</td>
+              <td>70M</td>
+              <td>S</td>
+              <td>1.4</td>
+              <td>2.8</td>
+              <td>0:35.12</td>
+              <td className="htop-cmd">/usr/bin/plasmashell --no-respawn</td>
+            </tr>
+            <tr>
+              <td>420</td>
+              <td>root</td>
+              <td>20</td>
+              <td>0</td>
+              <td>120M</td>
+              <td>24M</td>
+              <td>14M</td>
+              <td>S</td>
+              <td>0.6</td>
+              <td>0.6</td>
+              <td>0:04.11</td>
+              <td className="htop-cmd">/usr/bin/pipewire</td>
+            </tr>
+            <tr>
+              <td>425</td>
+              <td>root</td>
+              <td>20</td>
+              <td>0</td>
+              <td>110M</td>
+              <td>20M</td>
+              <td>12M</td>
+              <td>S</td>
+              <td>0.4</td>
+              <td>0.5</td>
+              <td>0:03.22</td>
+              <td className="htop-cmd">/usr/bin/wireplumber</td>
+            </tr>
+            <tr>
+              <td>612</td>
+              <td>dbus</td>
+              <td>20</td>
+              <td>0</td>
+              <td>45M</td>
+              <td>8M</td>
+              <td>4M</td>
+              <td>S</td>
+              <td>0.2</td>
+              <td>0.2</td>
+              <td>0:01.88</td>
+              <td className="htop-cmd">/usr/bin/dbus-daemon --system</td>
+            </tr>
+            <tr>
+              <td>1520</td>
+              <td>ablag</td>
+              <td>20</td>
+              <td>0</td>
+              <td>18M</td>
+              <td>6M</td>
+              <td>3M</td>
+              <td>R</td>
+              <td style={{ color: '#e5c07b', fontWeight: 600 }}>0.8</td>
+              <td>0.1</td>
+              <td>0:00.34</td>
+              <td className="htop-cmd" style={{ color: '#00ff41' }}>htop</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      {/* Bottom Function Bar */}
+      <div className="htop-fbar">
+        <span><span className="htop-fkey">F1</span>Help</span>
+        <span><span className="htop-fkey">F2</span>Setup</span>
+        <span><span className="htop-fkey">F3</span>Search</span>
+        <span><span className="htop-fkey">F4</span>Filter</span>
+        <span><span className="htop-fkey">F5</span>Tree</span>
+        <span><span className="htop-fkey">F6</span>SortBy</span>
+        <span><span className="htop-fkey">F7</span>Nice -</span>
+        <span><span className="htop-fkey">F8</span>Nice +</span>
+        <span><span className="htop-fkey">F9</span>Kill</span>
+        <span onClick={() => onExitRef.current && onExitRef.current()} style={{ cursor: 'pointer' }}>
+          <span className="htop-fkey" style={{ background: '#e06c75', color: '#fff' }}>F10</span>Quit [q]
+        </span>
+      </div>
+    </div>
+  );
+});
+
 const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFirefox }) => {
   const [tabs, setTabs] = useState([
     {
@@ -247,6 +732,11 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
   const [activeTabId, setActiveTabId] = useState(1);
   const [nextId, setNextId] = useState(2);
   const [isMaximized, setIsMaximized] = useState(false);
+  const [activeMode, setActiveMode] = useState(null); // 'cmatrix' or 'htop'
+
+  const handleExitActiveMode = useCallback(() => {
+    setActiveMode(null);
+  }, []);
 
   const toggleMaximize = () => setIsMaximized(prev => !prev);
 
@@ -273,6 +763,10 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
   };
 
   const handleTerminalClick = () => {
+    if (activeMode) {
+      setActiveMode(null);
+      return;
+    }
     if (inputRef.current) {
       inputRef.current.focus();
       scrollToBottom();
@@ -321,12 +815,10 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
       const mainCommand = tokens[0].toLowerCase();
 
       if (mainCommand === 'cd') {
-        // Only directory candidates
         candidates = availableEntries
           .filter(e => e.endsWith('/'))
           .filter(e => e.toLowerCase().startsWith(currentToken.toLowerCase()));
       } else if (mainCommand === 'firefox') {
-        // Files (especially pictures) & directories
         const picNode = getDirectoryNode('~/Pictures');
         const picEntries = picNode && picNode.children
           ? Object.keys(picNode.children)
@@ -343,16 +835,14 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
         if (tokens.length === 2 && !fullInput.endsWith(' ')) {
           candidates = PACMAN_FLAGS.filter(p => p.startsWith(currentToken));
         } else {
-          candidates = ['linux', 'mesa', 'kitty', 'hyprland', 'neovim', 'firefox', 'vlc']
+          candidates = ['linux', 'mesa', 'kitty', 'hyprland', 'neovim', 'firefox', 'vlc', 'sl', 'cmatrix', 'cowsay', 'fortune']
             .filter(pkg => pkg.startsWith(currentToken.toLowerCase()));
         }
       } else {
-        // General file and directory candidates
         candidates = availableEntries.filter(e => e.toLowerCase().startsWith(currentToken.toLowerCase()));
       }
     }
 
-    // Process completion candidates
     if (candidates.length === 1) {
       const match = candidates[0];
       let newTokens = [...previousTokens, match];
@@ -384,6 +874,15 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
   };
 
   const handleKeyDown = (e) => {
+    if (activeMode) {
+      if (e.key === 'q' || e.key === 'Escape' || (e.ctrlKey && e.key === 'c')) {
+        e.preventDefault();
+        e.stopPropagation();
+        setActiveMode(null);
+      }
+      return;
+    }
+
     if (e.key === 'Tab') {
       e.preventDefault();
       handleTabCompletion();
@@ -404,7 +903,6 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
       return;
     }
 
-    // Command History Navigation
     if (e.key === 'ArrowUp') {
       e.preventDefault();
       const history = activeTab.history || [];
@@ -470,6 +968,24 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
       return;
     }
 
+    // Support piping e.g. "fortune | cowsay"
+    if (trimmedCmd.includes('|')) {
+      const parts = trimmedCmd.split('|').map(p => p.trim());
+      if (parts[0].startsWith('fortune') && parts[1].startsWith('cowsay')) {
+        const randFortune = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
+        const cow = makeCow(randFortune);
+        patchTab(activeTabId, {
+          output: [
+            ...activeOutput,
+            { type: 'command', content: trimmedCmd, cwd: currentCwd },
+            { type: 'output', content: cow },
+            { type: 'prompt', cwd: currentCwd }
+          ]
+        });
+        return;
+      }
+    }
+
     const parts = trimmedCmd.split(' ');
     const mainCmd = parts[0].toLowerCase();
     const args = parts.slice(1);
@@ -480,21 +996,24 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
     switch (mainCmd) {
       case 'help':
         response = `Available Commands:
-  - help                : Show this help message
-  - clear (Ctrl+L)      : Clear the terminal screen
-  - ls [dir]            : List files and directories
-  - cd [dir]            : Change working directory
-  - pwd                 : Print working directory
-  - cat [file]          : Print file contents
-  - firefox [file/url]  : Open Firefox (e.g. firefox wallpaper.png)
-  - fastfetch           : Display system information
-  - date                : Show current date and time
-  - whoami              : Display current user
-  - uname -a            : Show kernel and system architecture
-  - uptime              : Show system running time
-  - echo [text]         : Output text to terminal
-  - history             : Show command history
-  - exit                : Close terminal tab
+  - help                 : Show this help message
+  - clear (Ctrl+L)       : Clear the terminal screen
+  - ls [dir]             : List files and directories
+  - cd [dir]             : Change working directory
+  - pwd                  : Print working directory
+  - cat [file]           : Print file contents
+  - firefox [file/url]   : Open Firefox (e.g. firefox wallpaper.png)
+  - fastfetch            : Display colorful system information
+  - cmatrix / matrix     : Digital rain matrix animation
+  - sl                   : Steam Locomotive train animation
+  - cowsay [text]        : Talking ASCII cow
+  - cowthink [text]      : Thinking ASCII cow
+  - fortune              : Random programming & Linux quotes
+  - cbonsai / bonsai     : Grow an ASCII bonsai tree
+  - htop / btop / top    : Interactive system & task monitor
+  - figlet [text]        : Big ASCII banner text
+  - pacman -Syu / -S     : Arch Linux package manager simulation
+  - date, whoami, uname, uptime, history, echo, sudo, exit
 
 Tip: Press [TAB] to auto-complete commands, files, and folders!`;
         break;
@@ -502,6 +1021,97 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
       case 'clear':
         patchTab(activeTabId, { output: [{ type: 'prompt', cwd: currentCwd }] });
         return;
+
+      case 'cmatrix':
+      case 'matrix':
+        setActiveMode('cmatrix');
+        patchTab(activeTabId, {
+          output: [
+            ...activeOutput,
+            { type: 'command', content: trimmedCmd, cwd: currentCwd },
+            { type: 'output', content: '[cmatrix - press q or click to exit]' },
+            { type: 'prompt', cwd: currentCwd }
+          ]
+        });
+        return;
+
+      case 'sl':
+        patchTab(activeTabId, {
+          output: [
+            ...activeOutput,
+            { type: 'command', content: trimmedCmd, cwd: currentCwd },
+            { type: 'sl' },
+            { type: 'prompt', cwd: currentCwd }
+          ]
+        });
+        return;
+
+      case 'htop':
+      case 'btop':
+      case 'top':
+        setActiveMode('htop');
+        patchTab(activeTabId, {
+          output: [
+            ...activeOutput,
+            { type: 'command', content: trimmedCmd, cwd: currentCwd },
+            { type: 'output', content: '[htop - press q or click to exit]' },
+            { type: 'prompt', cwd: currentCwd }
+          ]
+        });
+        return;
+
+      case 'cowsay':
+        response = makeCow(args.join(' ') || 'Arch Linux BTW.');
+        break;
+
+      case 'cowthink':
+        response = makeCow(args.join(' ') || 'Hmm... Should I try Wayland?', true);
+        break;
+
+      case 'fortune':
+        response = FORTUNES[Math.floor(Math.random() * FORTUNES.length)];
+        break;
+
+      case 'cbonsai':
+      case 'bonsai':
+        response = getBonsaiTree();
+        break;
+
+      case 'figlet':
+      case 'banner':
+        response = getFiglet(args.join(' '));
+        break;
+
+      case 'pacman': {
+        const flag = args[0];
+        if (flag === '-Syu' || flag === '-Syyu') {
+          response = `:: Synchronizing package databases...
+ core                                138.4 KiB   1.8 MiB/s 00:00 [####################################] 100%
+ extra                                 8.2 MiB  12.4 MiB/s 00:01 [####################################] 100%
+ multilib                            142.1 KiB   2.1 MiB/s 00:00 [####################################] 100%
+:: Starting full system upgrade...
+ there is nothing to do (system up to date!)`;
+        } else if (flag === '-S') {
+          const pkg = args[1] || 'neofetch';
+          response = `resolving dependencies...
+looking for conflicting packages...
+
+Packages (1) ${pkg}-latest
+
+Total Download Size:    1.42 MiB
+Total Installed Size:   4.86 MiB
+
+:: Proceed with installation? [Y/n] Y
+(1/1) checking keys in keyring                     [####################################] 100%
+(1/1) loading package files                        [####################################] 100%
+(1/1) installing ${pkg}                             [####################################] 100%
+:: Running post-transaction hooks...
+(1/1) Arming ConditionNeedsUpdate...`;
+        } else {
+          response = `error: no operation specified (use -h for help)`;
+        }
+        break;
+      }
 
       case 'ls': {
         const targetDir = args[0] ? (args[0] === '..' ? '~' : args[0].replace(/\/$/, '')) : currentCwd;
@@ -579,20 +1189,17 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
           if (onOpenFirefox) onOpenFirefox();
           response = 'Launching Firefox browser...';
         } else {
-          // Check if argument is a local file / picture
           const fileNode = resolveFile(target, currentCwd);
           if (fileNode && fileNode.isImage && fileNode.url) {
             if (onOpenFirefox) onOpenFirefox(fileNode.url);
             response = `[firefox] Opening image '${target}' in Firefox...`;
           } else if (fileNode && fileNode.content) {
-            // Text file
             if (onOpenFirefox) onOpenFirefox(`data:text/plain;charset=utf-8,${encodeURIComponent(fileNode.content)}`);
             response = `[firefox] Opening '${target}' in Firefox...`;
           } else if (target.startsWith('http://') || target.startsWith('https://')) {
             if (onOpenFirefox) onOpenFirefox(target);
             response = `[firefox] Opening '${target}' in Firefox...`;
           } else if (target.includes('.')) {
-            // Check if it's wallpaper.png directly
             if (target.toLowerCase() === 'wallpaper.png') {
               if (onOpenFirefox) onOpenFirefox(bgArch);
               response = `[firefox] Opening 'wallpaper.png' in Firefox...`;
@@ -714,6 +1321,7 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
   };
 
   const handleInputChange = (e) => {
+    if (activeMode) return;
     patchTab(activeTabId, { input: e.target.value });
     setTimeout(scrollToBottom, 10);
   };
@@ -817,6 +1425,16 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
           </div>
         </div>
 
+        {/* CMatrix Digital Rain Overlay */}
+        {activeMode === 'cmatrix' && (
+          <MatrixRain onExit={handleExitActiveMode} />
+        )}
+
+        {/* HTop / BTop Fullscreen Overlay */}
+        {activeMode === 'htop' && (
+          <HTopMonitor onExit={handleExitActiveMode} />
+        )}
+
         {/* Terminal Body */}
         <div className="terminal-body" ref={terminalBodyRef}>
           <pre>
@@ -831,6 +1449,8 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
                       <span className="prompt-dollar">$</span>
                       <span>{item.content}</span>
                     </>
+                  ) : item.type === 'sl' ? (
+                    <SteamLocomotive />
                   ) : item.type === 'fastfetch' ? (
                     <div className="fastfetch-container">
                       <div className="fastfetch-image-box">
@@ -895,6 +1515,7 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
                   value={activeTab.input}
                   onChange={handleInputChange}
                   onKeyDown={handleKeyDown}
+                  readOnly={!!activeMode}
                   autoFocus
                   autoComplete="off"
                   spellCheck="false"
