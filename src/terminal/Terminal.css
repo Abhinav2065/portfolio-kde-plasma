@@ -264,10 +264,10 @@
 .fastfetch-avatar {
     width: 175px;
     height: 175px;
-    border-radius: 8px;
+    border-radius: 4px;
     object-fit: cover;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    border: none;
+    box-shadow: none;
     display: block;
 }
 

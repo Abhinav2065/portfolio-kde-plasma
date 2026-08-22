@@ -8,6 +8,13 @@ import pfpImg from '../assets/pfp.png';
 import archLogo from '../assets/arch.png';
 import archAnim from '../assets/archLinuxLoginAnimation.png';
 
+// Fastfetch GitHub avatar URL with immediate in-memory caching
+const FASTFETCH_AVATAR_URL = 'https://avatars.githubusercontent.com/u/151655515?v=4';
+if (typeof window !== 'undefined') {
+  const imgCache = new Image();
+  imgCache.src = FASTFETCH_AVATAR_URL;
+}
+
 // Virtual File System matching actual desktop notes and media
 const createFileSystem = () => ({
   '~': {
@@ -631,7 +638,7 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
             { type: 'command', content: trimmedCmd, cwd: currentCwd },
             {
               type: 'fastfetch',
-              image: 'https://avatars.githubusercontent.com/u/151655515?v=4',
+              image: FASTFETCH_AVATAR_URL,
               rows: [
                 { quote: 'Running out of space? Just run\nsudo rm -fr ./*' },
                 { sep: true },
@@ -824,7 +831,14 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
                   ) : item.type === 'fastfetch' ? (
                     <div className="fastfetch-container">
                       <div className="fastfetch-image-box">
-                        <img src={item.image} alt="Avatar" className="fastfetch-avatar" />
+                        <img
+                          src={item.image}
+                          alt="Avatar"
+                          className="fastfetch-avatar"
+                          loading="eager"
+                          decoding="async"
+                          fetchPriority="high"
+                        />
                       </div>
                       <div className="fastfetch-info">
                         {item.rows.map((row, idx) => (
