@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48" height="48">
+  <defs>
+    <linearGradient id="folderGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#3daee9" />
+      <stop offset="100%" stop-color="#1d7ea8" />
+    </linearGradient>
+    <linearGradient id="folderBack" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2478a6" />
+      <stop offset="100%" stop-color="#185677" />
+    </linearGradient>
+    <linearGradient id="tabGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#55c1f5" />
+      <stop offset="100%" stop-color="#3daee9" />
+    </linearGradient>
+  </defs>
+  <!-- Back Folder Plate -->
+  <path d="M6 10 C6 8.5 7.5 7 9 7 L20 7 L24 11 L39 11 C40.5 11 42 12.5 42 14 L42 22 L6 22 Z" fill="url(#folderBack)" />
+  <!-- Folder Sheet Insert -->
+  <rect x="9" y="12" width="30" height="12" rx="2" fill="#ffffff" opacity="0.85" />
+  <!-- Front Folder Plate -->
+  <path d="M5 16 C5 14.5 6.5 13 8 13 L40 13 C41.5 13 43 14.5 43 16 L43 38 C43 40 41.5 41 39.5 41 L8.5 41 C6.5 41 5 40 5 38 Z" fill="url(#folderGrad)" />
+  <!-- Top Highlight on Front -->
+  <path d="M5 16 C5 14.5 6.5 13 8 13 L40 13 C41.5 13 43 14.5 43 16 L43 17 L5 17 Z" fill="url(#tabGrad)" />
+  <!-- Dolphin KDE Emblem / Tail glyph -->
+  <path d="M24 20 C27 20 30 22 31 25 C31.8 27.5 30.5 30 28.5 31 C26.5 32 25 33.5 25 35 C23.5 33.5 22 32.5 20.5 32 C18.5 31.2 17.5 29 18 26.5 C18.5 24 21 20 24 20 Z" fill="#ffffff" opacity="0.95" />
+  <!-- Eye -->
+  <circle cx="28" cy="24" r="1.2" fill="#1d7ea8" />
+</svg>

@@ -5,12 +5,14 @@ import terminal from '../assets/terminal.png'
 import notepad from '../assets/notepad.png'
 import pfp from '../assets/pfp.png'
 import github from '../assets/github.svg'
+import dolphinIcon from '../assets/dolphin.svg'
 
 
-const StartMenu = ({onClick, onOpenFirefox, onOpenTerminal, onOpenNotepad, onOpenGithub, onShutdown, onRestart, onLock}) => {
+const StartMenu = ({onClick, onOpenFirefox, onOpenTerminal, onOpenNotepad, onOpenGithub, onOpenDolphin, onShutdown, onRestart, onLock}) => {
     const [query, setQuery] = useState('');
 
     const apps = [
+        { name: 'Dolphin', open: onOpenDolphin, icon: dolphinIcon },
         { name: 'Firefox', open: onOpenFirefox, icon: firefox },
         { name: 'GitHub', open: onOpenGithub, icon: github },
         { name: 'Notepad', open: onOpenNotepad, icon: notepad },

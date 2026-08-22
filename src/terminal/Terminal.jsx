@@ -716,7 +716,7 @@ const HTopMonitor = React.memo(({ onExit }) => {
   );
 });
 
-const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFirefox, onShutdown }) => {
+const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFirefox, onOpenDolphin, onShutdown }) => {
   const [tabs, setTabs] = useState([
     {
       id: 1,
@@ -1255,6 +1255,12 @@ Total Installed Size:   4.86 MiB
             response = `[firefox] Searching '${target}' in Firefox...`;
           }
         }
+        break;
+      }
+
+      case 'dolphin': {
+        if (onOpenDolphin) onOpenDolphin();
+        response = 'Launching Dolphin File Manager...';
         break;
       }
 

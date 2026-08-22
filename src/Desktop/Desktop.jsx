@@ -15,6 +15,7 @@ import Settings from '../DesktopFeatures/Settings'
 import Notepad from './Notepad'
 import Calendar from '../DesktopFeatures/Calendar'
 import GitHubWindow from '../DesktopFeatures/GitHubWindow'
+import Dolphin from '../DesktopFeatures/Dolphin'
 import githubIcon from '../assets/github.svg'
 
 
@@ -39,12 +40,16 @@ const Desktop = () => {
   const [showGithub, setShowGithub] = useState(false);
   const [githubMinimized, setGithubMinimized] = useState(false);
 
+  const [showDolphin, setShowDolphin] = useState(false);
+  const [dolphinMinimized, setDolphinMinimized] = useState(false);
+
   const [zIndexes, setZIndexes] = useState({
     terminal: 10,
     firefox: 11,
     settings: 12,
     notepad: 13,
     github: 14,
+    dolphin: 15,
   });
   const [topZIndex, setTopZIndex] = useState(20);
 
@@ -67,6 +72,7 @@ const Desktop = () => {
     if (showSettings && !settingsMinimized) openApps.push('settings');
     if (notepad && !notepadMinimized) openApps.push('notepad');
     if (showGithub && !githubMinimized) openApps.push('github');
+    if (showDolphin && !dolphinMinimized) openApps.push('dolphin');
 
     if (!openApps.includes(appName)) return false;
     return openApps.every(name => name === appName || appZ >= (zIndexes[name] || 0));
@@ -310,6 +316,22 @@ const Desktop = () => {
     }
   }
 
+  const handleDolphinOpen = () => {
+    setShowDolphin(true);
+    setDolphinMinimized(false);
+    bringToFront('dolphin');
+    setShowStartMenu(false);
+  };
+
+  const handleDolphinClose = () => {
+    setShowDolphin(false);
+    setDolphinMinimized(false);
+  };
+
+  const handleDolphinMinimize = () => {
+    setDolphinMinimized(true);
+  };
+
   const handleShutdown = (isReboot = false) => {
     navigate('/shutdown', { state: { isReboot } });
   };
@@ -326,6 +348,7 @@ const Desktop = () => {
                 isFocused={isTopWindow('terminal')}
                 onFocus={() => bringToFront('terminal')}
                 onOpenFirefox={handleFirefoxOpen}
+                onOpenDolphin={handleDolphinOpen}
                 onShutdown={handleShutdown}
               />
             )}
@@ -350,6 +373,17 @@ const Desktop = () => {
                 onFocus={() => bringToFront('github')}
               />
             )}
+            {showDolphin && (
+              <Dolphin
+                onClose={handleDolphinClose}
+                onMinimize={handleDolphinMinimize}
+                isMinimized={dolphinMinimized}
+                zIndex={zIndexes.dolphin}
+                isFocused={isTopWindow('dolphin')}
+                onFocus={() => bringToFront('dolphin')}
+                onOpenFileInNotepad={handleIconNotepadOpen}
+              />
+            )}
             {notepad && (
               <Notepad
                 title={notepad.name}
@@ -371,6 +405,7 @@ const Desktop = () => {
               onOpenTerminal={handleTerminalOpen}
               onOpenNotepad={handleNotepadOpen}
               onOpenGithub={handleGithubOpen}
+              onOpenDolphin={handleDolphinOpen}
               onShutdown={() => handleShutdown(false)}
               onRestart={() => handleShutdown(true)}
               onLock={() => navigate('/login')}
