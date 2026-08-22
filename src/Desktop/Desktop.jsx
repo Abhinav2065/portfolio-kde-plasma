@@ -14,6 +14,8 @@ import StartMenu from '../DesktopFeatures/StartMenu'
 import Settings from '../DesktopFeatures/Settings'
 import Notepad from './Notepad'
 import Calendar from '../DesktopFeatures/Calendar'
+import GitHubWindow from '../DesktopFeatures/GitHubWindow'
+import githubIcon from '../assets/github.svg'
 
 
 const Desktop = () => {
@@ -34,11 +36,15 @@ const Desktop = () => {
   const [notepad, setNotepad] = useState(null);
   const [notepadMinimized, setNotepadMinimized] = useState(false);
 
+  const [showGithub, setShowGithub] = useState(false);
+  const [githubMinimized, setGithubMinimized] = useState(false);
+
   const [zIndexes, setZIndexes] = useState({
     terminal: 10,
     firefox: 11,
     settings: 12,
     notepad: 13,
+    github: 14,
   });
   const [topZIndex, setTopZIndex] = useState(20);
 
@@ -60,6 +66,7 @@ const Desktop = () => {
     if (showFirefox && !firefoxMinimized) openApps.push('firefox');
     if (showSettings && !settingsMinimized) openApps.push('settings');
     if (notepad && !notepadMinimized) openApps.push('notepad');
+    if (showGithub && !githubMinimized) openApps.push('github');
 
     if (!openApps.includes(appName)) return false;
     return openApps.every(name => name === appName || appZ >= (zIndexes[name] || 0));
@@ -265,6 +272,44 @@ const Desktop = () => {
     }
   }
 
+  const handleGithubClose = () => {
+    setShowGithub(false);
+    setGithubMinimized(false);
+  }
+
+  const handleGithubMinimize = () => {
+    setGithubMinimized(true);
+  }
+
+  const handleGithubOpen = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    setShowGithub(true);
+    setGithubMinimized(false);
+    bringToFront('github');
+  }
+
+  const handleGithubTaskbarClick = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (!showGithub) {
+      setShowGithub(true);
+      setGithubMinimized(false);
+      bringToFront('github');
+    } else if (githubMinimized) {
+      setGithubMinimized(false);
+      bringToFront('github');
+    } else if (isTopWindow('github')) {
+      setGithubMinimized(true);
+    } else {
+      bringToFront('github');
+    }
+  }
+
   const handleShutdown = (isReboot = false) => {
     navigate('/shutdown', { state: { isReboot } });
   };
@@ -295,6 +340,16 @@ const Desktop = () => {
                 externalUrl={firefoxUrl}
               />
             )}
+            {showGithub && (
+              <GitHubWindow
+                onClose={handleGithubClose}
+                onMinimize={handleGithubMinimize}
+                isMinimized={githubMinimized}
+                zIndex={zIndexes.github}
+                isFocused={isTopWindow('github')}
+                onFocus={() => bringToFront('github')}
+              />
+            )}
             {notepad && (
               <Notepad
                 title={notepad.name}
@@ -307,7 +362,7 @@ const Desktop = () => {
                 onFocus={() => bringToFront('notepad')}
               />
             )}
-           <Icons onOpenNotepad={handleIconNotepadOpen}></Icons>
+           <Icons onOpenNotepad={handleIconNotepadOpen} onOpenGithub={handleGithubOpen}></Icons>
 
           {showStartMenu && (
             <StartMenu
@@ -315,6 +370,7 @@ const Desktop = () => {
               onOpenFirefox={handleFirefoxOpen}
               onOpenTerminal={handleTerminalOpen}
               onOpenNotepad={handleNotepadOpen}
+              onOpenGithub={handleGithubOpen}
               onShutdown={() => handleShutdown(false)}
               onRestart={() => handleShutdown(true)}
               onLock={() => navigate('/login')}
@@ -346,6 +402,16 @@ const Desktop = () => {
                     <button type="button" className={`taskbar-btn ${showterminal ? 'active' : ''} ${showterminal && !terminalMinimized && isTopWindow('terminal') ? 'focused' : ''}`} onClick={handleTerminalTaskbarClick} title="Terminal">
                         <img src={terminal} alt="Terminal" className='tb-terminal' />
                     </button>
+                    {showGithub && (
+                      <button
+                        type="button"
+                        className={`taskbar-btn active ${!githubMinimized && isTopWindow('github') ? 'focused' : ''}`}
+                        onClick={handleGithubTaskbarClick}
+                        title="GitHub"
+                      >
+                        <img src={githubIcon} alt="GitHub" className='tb-github' style={{ width: '22px', height: '22px' }} />
+                      </button>
+                    )}
                     <button type="button" className={`taskbar-btn ${showSettings ? 'active' : ''} ${showSettings && !settingsMinimized && isTopWindow('settings') ? 'focused' : ''}`} onClick={handleSettingsTaskbarClick} title="Settings">
                         <img src={settings} alt="Settings" className='tb-settings' />
                     </button>

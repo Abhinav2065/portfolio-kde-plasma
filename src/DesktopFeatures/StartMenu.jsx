@@ -4,13 +4,15 @@ import firefox from '../assets/firefox.png'
 import terminal from '../assets/terminal.png'
 import notepad from '../assets/notepad.png'
 import pfp from '../assets/pfp.png'
+import github from '../assets/github.svg'
 
 
-const StartMenu = ({onClick, onOpenFirefox, onOpenTerminal, onOpenNotepad, onShutdown, onRestart, onLock}) => {
+const StartMenu = ({onClick, onOpenFirefox, onOpenTerminal, onOpenNotepad, onOpenGithub, onShutdown, onRestart, onLock}) => {
     const [query, setQuery] = useState('');
 
     const apps = [
         { name: 'Firefox', open: onOpenFirefox, icon: firefox },
+        { name: 'GitHub', open: onOpenGithub, icon: github },
         { name: 'Notepad', open: onOpenNotepad, icon: notepad },
         { name: 'Terminal', open: onOpenTerminal, icon: terminal },
     ];
