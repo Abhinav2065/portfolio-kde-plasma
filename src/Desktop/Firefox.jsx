@@ -36,13 +36,18 @@ const StartPage = ({onSearch}) => {
     )
 }
 
-const Firefox = ({onClose}) => {
+const Firefox = ({ onClose, onMinimize, isMinimized, zIndex, isFocused, onFocus }) => {
     const [tabs, setTabs] = useState([{ id: 1, url: HOME_URL, history: [HOME_URL], index: 0 }]);
     const [activeTabId, setActiveTabId] = useState(1);
     const [urlInput, setUrlInput] = useState(HOME_URL);
     const [nextId, setNextId] = useState(2);
+    const [isMaximized, setIsMaximized] = useState(false);
 
     const nodeRef = useRef(null);
+
+    const toggleMaximize = () => {
+        setIsMaximized(prev => !prev);
+    }
 
     const activeTab = tabs.find(t => t.id === activeTabId);
     const currentUrl = activeTab.url;
@@ -113,7 +118,10 @@ const Firefox = ({onClose}) => {
     }
 
     const closeTab = (id) => {
-        if (tabs.length === 1) return;
+        if (tabs.length <= 1) {
+            onClose();
+            return;
+        }
         const remaining = tabs.filter(t => t.id !== id);
         setTabs(remaining);
         if (id === activeTabId) {
@@ -125,8 +133,15 @@ const Firefox = ({onClose}) => {
 
 
   return (
-    <Draggable bounds="parent" nodeRef={nodeRef} handle='.firefox-tabstrip' defaultPosition={{x:100, y:50}} >
-        <div ref={nodeRef} className="firefox-window">
+    <Draggable bounds="parent" nodeRef={nodeRef} handle='.firefox-tabstrip' disabled={isMaximized} defaultPosition={{x:100, y:50}} >
+        <div
+            ref={nodeRef}
+            className={`firefox-window ${isMaximized ? 'maximized' : ''} ${isMinimized ? 'minimized' : ''}`}
+            onMouseDownCapture={onFocus}
+            onClickCapture={onFocus}
+            onMouseDown={onFocus}
+            style={{ zIndex }}
+        >
             <div className="firefox-tabstrip">
                 <div className="tabs-container">
                     {tabs.map(tab => (
@@ -145,9 +160,11 @@ const Firefox = ({onClose}) => {
                     ))}
                     <button type="button" className="new-tab-btn" onClick={newTab} title="New Tab">+</button>
                 </div>
-                <div className="window-controls">
-                    <button type="button" className="wc-btn" title="Minimize" onClick={() => {}}>—</button>
-                    <button type="button" className="wc-btn" title="Maximize" onClick={() => {}}>▢</button>
+                <div className="window-controls" onMouseDown={(e) => e.stopPropagation()}>
+                    <button type="button" className="wc-btn" title="Minimize" onClick={onMinimize}>—</button>
+                    <button type="button" className="wc-btn" title={isMaximized ? "Restore" : "Maximize"} onClick={toggleMaximize}>
+                        {isMaximized ? "❐" : "▢"}
+                    </button>
                     <button type="button" className="wc-btn wc-close" title="Close" onClick={onClose}>✕</button>
                 </div>
             </div>
@@ -174,7 +191,23 @@ const Firefox = ({onClose}) => {
                 <button type="button" className="toolbar-btn" title="Menu">☰</button>
             </div>
 
-            <div className="firefox-content">
+            <div className="firefox-content" style={{ position: 'relative' }}>
+                {!isFocused && (
+                    <div
+                        className="browser-focus-overlay"
+                        onMouseDown={onFocus}
+                        onClick={onFocus}
+                        style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            zIndex: 20,
+                            cursor: 'default'
+                        }}
+                    />
+                )}
                 {isHome ? (
                     <StartPage onSearch={handleSearch} />
                 ) : (

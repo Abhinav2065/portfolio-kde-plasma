@@ -8,8 +8,17 @@
     flex-direction: column;
     overflow: hidden;
     position: absolute;
-    z-index: 9999;
     box-shadow: 0 12px 40px rgba(0, 0, 0, 0.6);
+    transform-origin: center bottom;
+    transition: width 0.22s cubic-bezier(0.2, 0, 0, 1),
+                height 0.22s cubic-bezier(0.2, 0, 0, 1),
+                top 0.22s cubic-bezier(0.2, 0, 0, 1),
+                left 0.22s cubic-bezier(0.2, 0, 0, 1),
+                border-radius 0.22s cubic-bezier(0.2, 0, 0, 1),
+                box-shadow 0.22s ease,
+                opacity 0.2s cubic-bezier(0.2, 0, 0, 1),
+                transform 0.2s cubic-bezier(0.2, 0, 0, 1),
+                visibility 0.2s;
 }
 
 
@@ -109,25 +118,57 @@
     color: #e6e6ea;
 }
 
-.terminal-close button {
+.terminal-window-controls {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    cursor: default;
+}
+
+.term-wc-btn {
     background: none;
     border: none;
     color: #6b6b76;
-    cursor: pointer;
     font-size: 13px;
-    width: 24px;
+    width: 26px;
     height: 24px;
-    border-radius: 6px;
+    border-radius: 4px;
+    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: background-color 0.15s ease, color 0.15s ease;
 }
 
+.term-wc-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #e6e6ea;
+}
 
-.terminal-close button:hover {
+.term-wc-close:hover {
     background-color: #e5534b;
     color: white;
+}
+
+.terminal-window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: calc(100vh - 56px) !important;
+    border-radius: 0 !important;
+    transform: none !important;
+}
+
+.terminal-window.minimized {
+    opacity: 0 !important;
+    transform: scale(0.65) translateY(120px) !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+}
+
+.react-draggable-dragging.terminal-window,
+.react-draggable-dragging .terminal-window {
+    transition: none !important;
 }
 
 

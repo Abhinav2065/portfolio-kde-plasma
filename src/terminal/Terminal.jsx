@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import Draggable from 'react-draggable';
 import './Terminal.css';
 
-const Terminal = ({onClose}) => {
+const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
   const [tabs, setTabs] = useState([
     {
       id: 1,
@@ -15,6 +15,11 @@ const Terminal = ({onClose}) => {
   ]);
   const [activeTabId, setActiveTabId] = useState(1);
   const [nextId, setNextId] = useState(2);
+  const [isMaximized, setIsMaximized] = useState(false);
+
+  const toggleMaximize = () => {
+    setIsMaximized(prev => !prev);
+  }
 
   const nodeRef = useRef(null);  // This avoids "strict mode warnings"
   const inputRef = useRef(null);
@@ -159,7 +164,10 @@ const Terminal = ({onClose}) => {
   }
 
   const closeTab = (id) => {
-    if (tabs.length === 1) return;
+    if (tabs.length <= 1) {
+      onClose();
+      return;
+    }
     const remaining = tabs.filter(t => t.id !== id);
     setTabs(remaining);
     if (id === activeTabId) {
@@ -168,8 +176,16 @@ const Terminal = ({onClose}) => {
   }
 
   return (
-    <Draggable bounds="parent" nodeRef={nodeRef} handle='.terminal-header' defaultPosition={{x: 80, y: 40}} >
-      <div ref={nodeRef} className="terminal-window" onClick={handleTerminalClick}>
+    <Draggable bounds="parent" nodeRef={nodeRef} handle='.terminal-header' disabled={isMaximized} defaultPosition={{x: 80, y: 40}} >
+      <div
+        ref={nodeRef}
+        className={`terminal-window ${isMaximized ? 'maximized' : ''} ${isMinimized ? 'minimized' : ''}`}
+        onClick={handleTerminalClick}
+        onMouseDownCapture={onFocus}
+        onClickCapture={onFocus}
+        onMouseDown={onFocus}
+        style={{ zIndex }}
+      >
 
           <div className="terminal-header">
             <div className="terminal-tabs">
@@ -190,8 +206,12 @@ const Terminal = ({onClose}) => {
               ))}
               <button type="button" className="new-tab-btn" onClick={(e) => { e.stopPropagation(); newTab(); }} title="New Tab">+</button>
             </div>
-            <div className="terminal-close" onClick={handleCloseClick} onMouseDown={(e)=> e.stopPropagation()}>
-              <button title="Close">✕</button>
+            <div className="terminal-window-controls" onMouseDown={(e)=> e.stopPropagation()}>
+              <button type="button" className="term-wc-btn" title="Minimize" onClick={onMinimize}>—</button>
+              <button type="button" className="term-wc-btn" title={isMaximized ? "Restore" : "Maximize"} onClick={toggleMaximize}>
+                {isMaximized ? "❐" : "▢"}
+              </button>
+              <button type="button" className="term-wc-btn term-wc-close" title="Close" onClick={handleCloseClick}>✕</button>
             </div>
           </div>
           <div className="terminal-body">

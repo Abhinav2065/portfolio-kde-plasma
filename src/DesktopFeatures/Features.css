@@ -93,7 +93,7 @@
     border-radius: 12px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
     overflow: hidden;
-    z-index: 5;
+    z-index: 99998;
 }
 
 .start-menu {
@@ -238,6 +238,87 @@
     bottom: 100px;
     border-radius: 8px;
     overflow: hidden;
+    transform-origin: center bottom;
+    transition: width 0.22s cubic-bezier(0.2, 0, 0, 1),
+                height 0.22s cubic-bezier(0.2, 0, 0, 1),
+                top 0.22s cubic-bezier(0.2, 0, 0, 1),
+                left 0.22s cubic-bezier(0.2, 0, 0, 1),
+                border-radius 0.22s cubic-bezier(0.2, 0, 0, 1),
+                box-shadow 0.22s ease,
+                opacity 0.2s cubic-bezier(0.2, 0, 0, 1),
+                transform 0.2s cubic-bezier(0.2, 0, 0, 1),
+                visibility 0.2s;
+}
+
+.settings-window.maximized {
+    top: 0 !important;
+    left: 0 !important;
+    bottom: auto !important;
+    width: 100vw !important;
+    height: calc(100vh - 56px) !important;
+    border-radius: 0 !important;
+    transform: none !important;
+}
+
+.settings-window.minimized {
+    opacity: 0 !important;
+    transform: scale(0.65) translateY(120px) !important;
+    pointer-events: none !important;
+    visibility: hidden !important;
+}
+
+.react-draggable-dragging.settings-window,
+.react-draggable-dragging .settings-window {
+    transition: none !important;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background-color: rgba(34, 34, 34, 0.784); 
+    cursor: move;
+}
+
+.settings-controls {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    cursor: default;
+}
+
+.settings-wc-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 13px;
+    line-height: 1;
+    width: 28px;
+    height: 24px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.settings-wc-btn:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.settings-close-btn {
+    background: none;
+    border: none;
+    color: white;
+    font-size: 13px;
+}
+
+.settings-close-btn:hover {
+    background-color: #e81123;
+    color: white;
+    transform: none;
 }
 
 .settings-content {
@@ -308,26 +389,6 @@
 
 .slider {
     width: 60%;
-}
-
-
-.settings-header {
-    display: flex;
-   justify-content: space-between;
-   padding: 10px;
-   background-color: rgba(34, 34, 34, 0.784); 
-}
-
-.settings-close-btn {
-    background: none;
-    border: none;
-    color: white;
-    font-weight: bolder;
-}
-
-.settings-close-btn:hover {
-    color: red;
-    transform: scale(1.1);
 }
 
 

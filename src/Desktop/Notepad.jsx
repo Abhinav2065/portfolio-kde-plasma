@@ -39,9 +39,13 @@ const formatContent = (text) => {
   return blocks;
 }
 
-const Notepad = ({ title, content, onClose }) => {
-
+const Notepad = ({ title, content, onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
+  const [isMaximized, setIsMaximized] = React.useState(false);
   const nodeRef = useRef(null);
+
+  const toggleMaximize = () => {
+    setIsMaximized(prev => !prev);
+  }
 
   const body = useMemo(() => {
     const stored = localStorage.getItem(`notepad-${title}`);
@@ -49,13 +53,26 @@ const Notepad = ({ title, content, onClose }) => {
   }, [title, content]);
 
   return (
-    <Draggable bounds="parent" nodeRef={nodeRef} handle='.notepad-header' defaultPosition={{ x: 120, y: 40 }}>
-      <div ref={nodeRef} className="notepad">
+    <Draggable bounds="parent" nodeRef={nodeRef} handle='.notepad-header' disabled={isMaximized} defaultPosition={{ x: 120, y: 40 }}>
+      <div
+        ref={nodeRef}
+        className={`notepad ${isMaximized ? 'maximized' : ''} ${isMinimized ? 'minimized' : ''}`}
+        onMouseDownCapture={onFocus}
+        onClickCapture={onFocus}
+        onMouseDown={onFocus}
+        style={{ zIndex }}
+      >
         <div className="notepad-header">
           <div className="notepad-title">
             {title}
           </div>
-          <button className="notepad-close" onClick={onClose}>×</button>
+          <div className="notepad-controls" onMouseDown={(e) => e.stopPropagation()}>
+            <button type="button" className="notepad-btn" title="Minimize" onClick={onMinimize}>—</button>
+            <button type="button" className="notepad-btn" title={isMaximized ? "Restore" : "Maximize"} onClick={toggleMaximize}>
+              {isMaximized ? "❐" : "▢"}
+            </button>
+            <button type="button" className="notepad-btn notepad-close" title="Close" onClick={onClose}>×</button>
+          </div>
         </div>
         <div className="notepad-body">
           <div className="notepad-text">{body}</div>
