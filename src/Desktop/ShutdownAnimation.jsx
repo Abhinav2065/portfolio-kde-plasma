@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useRef } from 'react';
 import './bootanimation.css';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
-const shutdownMessages = [
+const baseShutdownMessages = [
   "[  OK  ] Stopped target Graphical Interface.",
   "[  OK  ] Stopping KDE Plasma Display Manager...",
   "[  OK  ] Stopped KDE Plasma Display Manager.",
@@ -35,49 +35,85 @@ const shutdownMessages = [
   "[  OK  ] Stopped udev Kernel Device Manager.",
   "[  OK  ] All filesystems unmounted.",
   "[  OK  ] Deactivated swap /dev/zram0.",
-  "[  OK  ] Reached target System Shutdown.",
-  "[  OK  ] Reached target Power-Off.",
-  "[  OK  ] Powering off."
+  "[  OK  ] Reached target System Shutdown."
 ];
 
 const ShutdownAnimation = () => {
   const navigate = useNavigate();
-  const [isPoweredOff, setIsPoweredOff] = useState(false);
+  const location = useLocation();
+  const isReboot = !!location.state?.isReboot;
+
+  // 'shutting_down' | 'blank' | 'text'
+  const [phase, setPhase] = useState('shutting_down');
   const bottomRef = useRef(null);
 
-  useEffect(() => {
-    const finishTime = shutdownMessages.length * 75 + 1200;
-
-    const timer = setTimeout(() => {
-      setIsPoweredOff(true);
-    }, finishTime);
-
-    return () => clearTimeout(timer);
-  }, []);
+  const shutdownMessages = [
+    ...baseShutdownMessages,
+    isReboot ? "[  OK  ] Reached target Reboot." : "[  OK  ] Reached target Power-Off.",
+    isReboot ? "[  OK  ] Restarting system." : "[  OK  ] Powering off."
+  ];
 
   useEffect(() => {
-    const id = requestAnimationFrame(() => {
-      bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    });
-    return () => cancelAnimationFrame(id);
+    // 1. Stream logs
+    const logsDuration = shutdownMessages.length * 75 + 1000;
+    const blankTimer = setTimeout(() => {
+      setPhase('blank');
+
+      if (isReboot) {
+        // Show black screen for 1 second, then navigate to /boot
+        const rebootTimer = setTimeout(() => {
+          navigate('/boot');
+        }, 1000);
+        return () => clearTimeout(rebootTimer);
+      } else {
+        // Pure blank screen for 2.4s, then show aesthetic text
+        const textTimer = setTimeout(() => {
+          setPhase('text');
+        }, 2400);
+        return () => clearTimeout(textTimer);
+      }
+    }, logsDuration);
+
+    return () => clearTimeout(blankTimer);
+  }, [isReboot, navigate, shutdownMessages.length]);
+
+  useEffect(() => {
+    if (phase === 'shutting_down') {
+      const id = requestAnimationFrame(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+      });
+      return () => cancelAnimationFrame(id);
+    }
   });
 
   const handlePowerOn = () => {
     navigate('/boot');
   };
 
-  if (isPoweredOff) {
+  if (phase === 'blank') {
     return (
       <div
-        className="power-off-screen"
+        className="power-off-screen blank-screen"
+        onClick={handlePowerOn}
+        onKeyDown={handlePowerOn}
+        tabIndex={0}
+        autoFocus
+      />
+    );
+  }
+
+  if (phase === 'text') {
+    return (
+      <div
+        className="power-off-screen text-screen"
         onClick={handlePowerOn}
         onKeyDown={handlePowerOn}
         tabIndex={0}
         autoFocus
       >
-        <div className="power-off-hint">
-          <span className="power-off-icon">⏻</span>
-          <span>System powered off. Click or press any key to power on.</span>
+        <div className="aesthetic-shutdown-container">
+          <h1 className="aesthetic-nepali-text">चक्चके!</h1>
+          <div className="aesthetic-subtext">Click or press any key to power on</div>
         </div>
       </div>
     );

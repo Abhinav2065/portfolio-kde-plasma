@@ -154,7 +154,8 @@ const COMMANDS = [
   'help', 'clear', 'ls', 'pwd', 'cd', 'cat', 'date', 'echo',
   'firefox', 'fastfetch', 'neofetch', 'whoami', 'uname', 'uptime', 'history',
   'cmatrix', 'matrix', 'sl', 'cowsay', 'cowthink', 'fortune', 'cbonsai', 'bonsai',
-  'htop', 'btop', 'top', 'figlet', 'pacman', 'sudo', 'mkdir', 'touch', 'rm', 'exit'
+  'htop', 'btop', 'top', 'figlet', 'pacman', 'sudo', 'shutdown', 'poweroff', 'reboot',
+  'mkdir', 'touch', 'rm', 'exit'
 ];
 
 const GIT_COMMANDS = ['status', 'commit', 'push', 'pull', 'branch', 'checkout', 'log', 'diff', 'add'];
@@ -715,7 +716,7 @@ const HTopMonitor = React.memo(({ onExit }) => {
   );
 });
 
-const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFirefox }) => {
+const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFirefox, onShutdown }) => {
   const [tabs, setTabs] = useState([
     {
       id: 1,
@@ -1013,6 +1014,8 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
   - htop / btop / top    : Interactive system & task monitor
   - figlet [text]        : Big ASCII banner text
   - pacman -Syu / -S     : Arch Linux package manager simulation
+  - shutdown / poweroff  : Power off the system
+  - reboot               : Restart the system
   - date, whoami, uname, uptime, history, echo, sudo, exit
 
 Tip: Press [TAB] to auto-complete commands, files, and folders!`;
@@ -1021,6 +1024,45 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
       case 'clear':
         patchTab(activeTabId, { output: [{ type: 'prompt', cwd: currentCwd }] });
         return;
+
+      case 'shutdown':
+      case 'poweroff':
+      case 'halt':
+      case 'init': {
+        if (mainCmd === 'init' && args[0] !== '0') {
+          response = 'Usage: init 0 (to power off)';
+          break;
+        }
+        patchTab(activeTabId, {
+          output: [
+            ...activeOutput,
+            { type: 'command', content: trimmedCmd, cwd: currentCwd },
+            { type: 'output', content: 'Shutdown scheduled: Powering off system...' }
+          ]
+        });
+        setTimeout(() => {
+          if (onShutdown) {
+            onShutdown(false);
+          }
+        }, 500);
+        return;
+      }
+
+      case 'reboot': {
+        patchTab(activeTabId, {
+          output: [
+            ...activeOutput,
+            { type: 'command', content: trimmedCmd, cwd: currentCwd },
+            { type: 'output', content: 'Reboot scheduled: Restarting system...' }
+          ]
+        });
+        setTimeout(() => {
+          if (onShutdown) {
+            onShutdown(true);
+          }
+        }, 500);
+        return;
+      }
 
       case 'cmatrix':
       case 'matrix':
@@ -1277,7 +1319,10 @@ Total Installed Size:   4.86 MiB
       }
 
       case 'sudo':
-        if (args.join(' ').includes('rm -rf') || args.join(' ').includes('rm -fr')) {
+        if (args[0] === 'shutdown' || args[0] === 'poweroff' || args[0] === 'reboot' || args[0] === 'init') {
+          processCommand(args.join(' '));
+          return;
+        } else if (args.join(' ').includes('rm -rf') || args.join(' ').includes('rm -fr')) {
           window.location.assign('https://www.youtube.com/watch?v=dQw4w9WgXcQ');
           response = 'Executing payload... Enjoy!';
         } else {

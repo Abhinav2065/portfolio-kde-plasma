@@ -65,34 +65,66 @@
     user-select: none;
 }
 
-.power-off-hint {
+.blank-screen {
+    cursor: default;
+}
+
+.aesthetic-shutdown-container {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
-    color: rgba(255, 255, 255, 0.3);
-    font-family: "JetBrains Mono", "Fira Code", monospace;
+    justify-content: center;
+    gap: 18px;
+    text-align: center;
+}
+
+.aesthetic-nepali-text {
+    margin: 0;
+    padding: 0;
+    font-size: clamp(48px, 8vw, 76px);
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: 4px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans Devanagari", sans-serif;
+    text-shadow: 0 0 30px rgba(255, 255, 255, 0.45), 0 0 60px rgba(255, 255, 255, 0.2);
+    animation: aestheticSlideUp 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.aesthetic-subtext {
     font-size: 13px;
-    transition: color 0.3s ease, transform 0.3s ease;
-    animation: pulsePower 3s ease-in-out infinite;
-}
-
-.power-off-screen:hover .power-off-hint {
-    color: rgba(255, 255, 255, 0.75);
-    transform: scale(1.04);
-}
-
-.power-off-icon {
-    font-size: 32px;
-    color: rgba(255, 255, 255, 0.4);
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.35);
+    font-family: "JetBrains Mono", "Fira Code", monospace;
+    letter-spacing: 1.5px;
+    opacity: 0;
+    animation: aestheticFadeInSub 1s ease 0.6s forwards;
     transition: color 0.3s ease;
 }
 
-.power-off-screen:hover .power-off-icon {
-    color: #3daee9;
+.power-off-screen:hover .aesthetic-subtext {
+    color: rgba(255, 255, 255, 0.85);
 }
 
-@keyframes pulsePower {
-    0%, 100% { opacity: 0.3; }
-    50% { opacity: 0.75; }
+@keyframes aestheticSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(45px) scale(0.94);
+        filter: blur(10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+        filter: blur(0);
+    }
+}
+
+@keyframes aestheticFadeInSub {
+    0% {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

@@ -6,7 +6,7 @@ import notepad from '../assets/notepad.png'
 import pfp from '../assets/pfp.png'
 
 
-const StartMenu = ({onClick, onOpenFirefox, onOpenTerminal, onOpenNotepad}) => {
+const StartMenu = ({onClick, onOpenFirefox, onOpenTerminal, onOpenNotepad, onShutdown, onRestart, onLock}) => {
     const [query, setQuery] = useState('');
 
     const apps = [
@@ -60,13 +60,37 @@ const StartMenu = ({onClick, onOpenFirefox, onOpenTerminal, onOpenNotepad}) => {
                 </div>
 
                 <div className="start-menu-footer">
-                    <button type="button" className="footer-btn" title="Lock">
+                    <button
+                        type="button"
+                        className="footer-btn"
+                        title="Lock Screen"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (onLock) onLock();
+                        }}
+                    >
                         <span className="material-symbol">🔒</span>
                     </button>
-                    <button type="button" className="footer-btn" title="Restart">
+                    <button
+                        type="button"
+                        className="footer-btn"
+                        title="Restart System"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (onRestart) onRestart();
+                        }}
+                    >
                         <span className="material-symbol">⟳</span>
                     </button>
-                    <button type="button" className="footer-btn" title="Shut down">
+                    <button
+                        type="button"
+                        className="footer-btn"
+                        title="Shut Down System"
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            if (onShutdown) onShutdown();
+                        }}
+                    >
                         <span className="material-symbol">⏻</span>
                     </button>
                 </div>

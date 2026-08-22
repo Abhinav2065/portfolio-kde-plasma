@@ -265,6 +265,10 @@ const Desktop = () => {
     }
   }
 
+  const handleShutdown = (isReboot = false) => {
+    navigate('/shutdown', { state: { isReboot } });
+  };
+
   return (
     <div>
        <div className="desktop" onClick={handleDesktopClick}>
@@ -277,6 +281,7 @@ const Desktop = () => {
                 isFocused={isTopWindow('terminal')}
                 onFocus={() => bringToFront('terminal')}
                 onOpenFirefox={handleFirefoxOpen}
+                onShutdown={handleShutdown}
               />
             )}
             {showFirefox && (
@@ -310,6 +315,9 @@ const Desktop = () => {
               onOpenFirefox={handleFirefoxOpen}
               onOpenTerminal={handleTerminalOpen}
               onOpenNotepad={handleNotepadOpen}
+              onShutdown={() => handleShutdown(false)}
+              onRestart={() => handleShutdown(true)}
+              onLock={() => navigate('/login')}
             />
           )}
 
