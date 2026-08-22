@@ -232,7 +232,7 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFir
       history: [],
       historyIndex: -1,
       output: [
-        { type: 'output', content: 'Welcome to kitty terminal on Arch Linux!\nType "help" or use TAB to auto-complete commands, files, and directories.\nTip: Try typing "firefox wallpaper.png" to view pictures in Firefox!' },
+        { type: 'output', content: 'type "help" to see available commands' },
         { type: 'prompt' }
       ]
     }
