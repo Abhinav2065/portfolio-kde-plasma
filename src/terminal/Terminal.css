@@ -176,6 +176,8 @@
     flex: 1;
     padding: 12px 14px;
     overflow-y: auto;
+    overflow-x: hidden;
+    scroll-behavior: smooth;
     color: #d9d9de;
     font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', ui-monospace, Menlo, Consolas, monospace;
     font-size: 13px;
@@ -187,6 +189,8 @@
     margin: 0;
     padding: 0;
     pointer-events: none;
+    white-space: pre-wrap;
+    word-break: break-word;
 }
 
 

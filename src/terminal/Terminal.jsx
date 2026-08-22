@@ -2,47 +2,121 @@ import React, { useState, useRef, useEffect } from 'react';
 import Draggable from 'react-draggable';
 import './Terminal.css';
 
-// Virtual File System
-const FILE_SYSTEM = {
+// Import local assets for virtual filesystem pictures
+import bgArch from '../assets/bg-arch.png';
+import pfpImg from '../assets/pfp.png';
+import archLogo from '../assets/arch.png';
+import archAnim from '../assets/archLinuxLoginAnimation.png';
+
+// Virtual File System matching actual desktop notes and media
+const createFileSystem = () => ({
   '~': {
     type: 'dir',
     children: {
       'Desktop': {
         type: 'dir',
         children: {
-          'portfolio.txt': { type: 'file', content: 'Welcome to my KDE Plasma / Arch Linux portfolio desktop!' },
-          'resume.pdf': { type: 'file', content: 'Abhinav Siluwal — STEM Developer & Linux Enthusiast' }
+          'About_Me.txt': {
+            type: 'file',
+            content: `Hi! My name is Abhinav Siluwal, I am 17 years old high school student and STEM enthusiast from Kathmandu, Nepal. I am currently in 12th grade on the NEB curriculum. I love to code and build robots and mess with electronics. I want to study Electrical Engineering after I complete my high school while learning to code on my own. I am currently mainly learning frontend development and C/C++ for working with microcontrollers as well as learning some Python for some of my projects. Also I have been using Linux for 4 years and daily driving linux for 2 and a half years. I currently use Arch Linux with Hyprland and I really enjoy using linux, customizing it and editing it to make it just the way I like it.`
+          },
+          'What_is_this.txt': {
+            type: 'file',
+            content: `This is me trying to replicate a Linux desktop environment like KDE Plasma. Basically this project could fool a beginner into thinking that this is not a website but an actual OS if it were full screened, it has some easter eggs and this is the biggest project that i have ever made. It has what i think really awesome features in it which i really love. For example i made the terminal which is i think really cool and it has some working command (do try sudo rm -rf there).`
+          },
+          'Projects.txt': {
+            type: 'file',
+            content: `Here are some of the Projects that i have worked on:
+
+1. Wheel Bogie Suspension System
+So i made a simple wheel bogie suspension system (the kinda suspension that are used in rovers for space and stuff), so the rover could easily travel through rough terrain if it were given a decently good torque motor according to its weight. I really had fun making this project as it was one of my favorite hardware projects for my school's annual Science Fair called Code Walk.
+
+2. Self Balancing Robot using PID controllers
+I made a self balancing robot that balanced on 2 wheels using the PID controller. It had a gyroscope which detected tilt and angle, and the PID controller tuned the motors to stay upright despite human disturbances.
+
+3. Solar System Simulation using WebGL
+Interactive 2D and 3D simulation with Newtonian physics and orbital gravity.
+
+4. Pika Network API
+Custom stats & overlays API built in Python for Bedwars gameplay.`
+          },
+          'Links.txt': {
+            type: 'file',
+            content: `My GitHub: https://github.com/Abhinav2065\nMy LinkedIn: https://www.linkedin.com/in/abhinavsl/\nMy Email: abhinavsl@proton.me`
+          },
+          'passwords.txt': {
+            type: 'file',
+            content: `sudo password - "123", try sudo rm -rf`
+          }
         }
       },
       'Documents': {
         type: 'dir',
         children: {
-          'about_me.txt': { type: 'file', content: 'Hi, I am Abhinav Siluwal! A developer and robotics enthusiast building systems on Linux.' },
-          'skills.md': { type: 'file', content: '# Skills\n- React, JavaScript, Node.js\n- Python, C/C++, Linux Kernel, Git\n- Robotics, Embedded Systems, ROS' }
+          'about_me.txt': {
+            type: 'file',
+            content: 'Abhinav Siluwal — STEM Developer & Robotics Builder on Arch Linux.'
+          },
+          'skills.md': {
+            type: 'file',
+            content: '# Skills\n- React, JavaScript, Vite, CSS\n- Python, C/C++, Linux Kernel, Git\n- Robotics, ROS, Embedded Microcontrollers'
+          }
         }
       },
       'Downloads': {
         type: 'dir',
         children: {
-          'archlinux-2026.iso': { type: 'file', content: '[Binary ISO file: Arch Linux Rolling Release x86_64]' }
-        }
-      },
-      'Music': {
-        type: 'dir',
-        children: {
-          'synthwave.mp3': { type: 'file', content: '♪ ♫ Playing: Justin Bieber - Beauty And A Beat ♫ ♪' }
+          'archlinux-2026.08.iso': {
+            type: 'file',
+            content: '[Binary ISO file: Arch Linux Rolling Release x86_64]'
+          }
         }
       },
       'Pictures': {
         type: 'dir',
         children: {
-          'wallpaper.png': { type: 'file', content: '[Image PNG: Arch Linux 4K Minimal Wallpaper]' }
+          'wallpaper.png': {
+            type: 'file',
+            isImage: true,
+            url: bgArch,
+            content: '[Image PNG: Arch Linux 4K Minimal Wallpaper]'
+          },
+          'profile.png': {
+            type: 'file',
+            isImage: true,
+            url: pfpImg,
+            content: '[Image PNG: Profile Avatar]'
+          },
+          'arch_logo.png': {
+            type: 'file',
+            isImage: true,
+            url: archLogo,
+            content: '[Image PNG: Arch Linux Emblem]'
+          },
+          'arch_animation.png': {
+            type: 'file',
+            isImage: true,
+            url: archAnim,
+            content: '[Image PNG: Login Animation Banner]'
+          }
+        }
+      },
+      'Music': {
+        type: 'dir',
+        children: {
+          'synthwave.mp3': {
+            type: 'file',
+            content: '♪ ♫ Playing: Justin Bieber - Beauty And A Beat ♫ ♪'
+          }
         }
       },
       'Videos': {
         type: 'dir',
         children: {
-          'demo.mp4': { type: 'file', content: '[Video MP4: KDE Plasma Desktop Showcase]' }
+          'demo.mp4': {
+            type: 'file',
+            content: '[Video MP4: KDE Plasma Desktop Showcase]'
+          }
         }
       },
       'Projects': {
@@ -65,11 +139,13 @@ const FILE_SYSTEM = {
       }
     }
   }
-};
+});
+
+const FILE_SYSTEM = createFileSystem();
 
 const COMMANDS = [
   'help', 'clear', 'ls', 'pwd', 'cd', 'cat', 'date', 'echo',
-  'fastfetch', 'neofetch', 'whoami', 'uname', 'uptime', 'history',
+  'firefox', 'fastfetch', 'neofetch', 'whoami', 'uname', 'uptime', 'history',
   'mkdir', 'touch', 'rm', 'sudo', 'pacman', 'kitty', 'exit'
 ];
 
@@ -81,7 +157,8 @@ function getDirectoryNode(cwd) {
   if (cwd === '~' || cwd === '/home/ablag') {
     return FILE_SYSTEM['~'];
   }
-  const parts = cwd.replace(/^~\/?/, '').split('/').filter(Boolean);
+  const cleanPath = cwd.replace(/^\/home\/ablag\/?/, '').replace(/^~\/?/, '');
+  const parts = cleanPath.split('/').filter(Boolean);
   let current = FILE_SYSTEM['~'];
   for (const part of parts) {
     if (current && current.type === 'dir' && current.children && current.children[part]) {
@@ -91,6 +168,46 @@ function getDirectoryNode(cwd) {
     }
   }
   return current;
+}
+
+// Find a file anywhere or relative to cwd
+function resolveFile(targetPath, currentCwd) {
+  let searchDir = currentCwd;
+  let filename = targetPath;
+
+  if (targetPath.includes('/')) {
+    const parts = targetPath.split('/');
+    filename = parts.pop();
+    const dirPart = parts.join('/');
+    if (dirPart.startsWith('~') || dirPart.startsWith('/home/ablag')) {
+      searchDir = dirPart;
+    } else if (currentCwd === '~') {
+      searchDir = `~/${dirPart}`;
+    } else {
+      searchDir = `${currentCwd}/${dirPart}`;
+    }
+  }
+
+  const dirNode = getDirectoryNode(searchDir);
+  if (dirNode && dirNode.children && dirNode.children[filename]) {
+    return dirNode.children[filename];
+  }
+
+  // Fallback check in ~/Pictures if asking for an image
+  if (filename.match(/\.(png|jpg|jpeg|gif|svg|webp)$/i)) {
+    const picNode = getDirectoryNode('~/Pictures');
+    if (picNode && picNode.children && picNode.children[filename]) {
+      return picNode.children[filename];
+    }
+  }
+
+  // Fallback check in ~/Desktop if asking for a text file
+  const deskNode = getDirectoryNode('~/Desktop');
+  if (deskNode && deskNode.children && deskNode.children[filename]) {
+    return deskNode.children[filename];
+  }
+
+  return null;
 }
 
 // Find longest common prefix of a list of strings
@@ -106,7 +223,7 @@ function getLongestCommonPrefix(strings) {
   return prefix;
 }
 
-const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
+const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus, onOpenFirefox }) => {
   const [tabs, setTabs] = useState([
     {
       id: 1,
@@ -115,7 +232,7 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
       history: [],
       historyIndex: -1,
       output: [
-        { type: 'output', content: 'Welcome to kitty terminal on Arch Linux!\nType "help" or use TAB to auto-complete commands and files.' },
+        { type: 'output', content: 'Welcome to kitty terminal on Arch Linux!\nType "help" or use TAB to auto-complete commands, files, and directories.\nTip: Try typing "firefox wallpaper.png" to view pictures in Firefox!' },
         { type: 'prompt' }
       ]
     }
@@ -129,6 +246,7 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
   const nodeRef = useRef(null);
   const inputRef = useRef(null);
   const outputEndRef = useRef(null);
+  const terminalBodyRef = useRef(null);
 
   const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
   const activeOutput = activeTab.output;
@@ -138,9 +256,19 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
     setTabs(prev => prev.map(t => t.id === id ? { ...t, ...patch } : t));
   };
 
+  const scrollToBottom = () => {
+    if (terminalBodyRef.current) {
+      terminalBodyRef.current.scrollTop = terminalBodyRef.current.scrollHeight;
+    }
+    if (outputEndRef.current) {
+      outputEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+  };
+
   const handleTerminalClick = () => {
     if (inputRef.current) {
       inputRef.current.focus();
+      scrollToBottom();
     }
   };
 
@@ -151,15 +279,14 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
   };
 
   useEffect(() => {
-    if (outputEndRef.current) {
-      outputEndRef.current.scrollIntoView({ behavior: 'smooth' });
-    }
+    scrollToBottom();
   }, [activeOutput]);
 
   useEffect(() => {
     if (inputRef.current) {
       inputRef.current.focus();
     }
+    scrollToBottom();
   }, [activeTabId]);
 
   // Tab Auto-Completion Handler
@@ -180,18 +307,25 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
     if (isFirstWord) {
       // 1. Command completion
       candidates = COMMANDS.filter(cmd => cmd.startsWith(currentToken.toLowerCase()));
-      // Also check executable files in directory
-      const fileCandidates = availableEntries.filter(e => e.startsWith(currentToken));
+      // Also check executable files in current directory
+      const fileCandidates = availableEntries.filter(e => e.toLowerCase().startsWith(currentToken.toLowerCase()));
       candidates = [...candidates, ...fileCandidates];
     } else {
       const mainCommand = tokens[0].toLowerCase();
 
       if (mainCommand === 'cd') {
         // Only directory candidates
-        const dirCandidates = availableEntries
+        candidates = availableEntries
           .filter(e => e.endsWith('/'))
           .filter(e => e.toLowerCase().startsWith(currentToken.toLowerCase()));
-        candidates = dirCandidates;
+      } else if (mainCommand === 'firefox') {
+        // Files (especially pictures) & directories
+        const picNode = getDirectoryNode('~/Pictures');
+        const picEntries = picNode && picNode.children
+          ? Object.keys(picNode.children)
+          : [];
+        const allPossible = Array.from(new Set([...availableEntries, ...picEntries]));
+        candidates = allPossible.filter(e => e.toLowerCase().startsWith(currentToken.toLowerCase()));
       } else if (mainCommand === 'git') {
         if (tokens.length === 2 && !fullInput.endsWith(' ')) {
           candidates = GIT_COMMANDS.filter(g => g.startsWith(currentToken.toLowerCase()));
@@ -206,7 +340,7 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
             .filter(pkg => pkg.startsWith(currentToken.toLowerCase()));
         }
       } else {
-        // File and directory candidates
+        // General file and directory candidates
         candidates = availableEntries.filter(e => e.toLowerCase().startsWith(currentToken.toLowerCase()));
       }
     }
@@ -216,19 +350,18 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
       const match = candidates[0];
       let newTokens = [...previousTokens, match];
       let completedText = newTokens.join(' ');
-      // Add trailing space if not ending in directory slash
       if (!match.endsWith('/')) {
         completedText += ' ';
       }
       patchTab(activeTabId, { input: completedText });
+      setTimeout(scrollToBottom, 20);
     } else if (candidates.length > 1) {
       const lcp = getLongestCommonPrefix(candidates);
       if (lcp.length > currentToken.length) {
-        // Auto-expand to longest common prefix
         const newTokens = [...previousTokens, lcp];
         patchTab(activeTabId, { input: newTokens.join(' ') });
+        setTimeout(scrollToBottom, 20);
       } else {
-        // Show matching candidates in terminal output (like real Bash/Zsh)
         const suggestionsDisplay = candidates.join('   ');
         patchTab(activeTabId, {
           output: [
@@ -238,6 +371,7 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
             { type: 'prompt', cwd: currentCwd }
           ]
         });
+        setTimeout(scrollToBottom, 20);
       }
     }
   };
@@ -259,6 +393,7 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
         history: newHistory,
         historyIndex: newHistory ? newHistory.length : 0
       });
+      setTimeout(scrollToBottom, 20);
       return;
     }
 
@@ -272,6 +407,7 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
         input: history[nextIndex] || '',
         historyIndex: nextIndex
       });
+      setTimeout(scrollToBottom, 20);
       return;
     }
 
@@ -288,6 +424,7 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
           historyIndex: nextIndex
         });
       }
+      setTimeout(scrollToBottom, 20);
       return;
     }
 
@@ -307,6 +444,7 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
         ],
         input: ''
       });
+      setTimeout(scrollToBottom, 20);
       return;
     }
   };
@@ -335,20 +473,21 @@ const Terminal = ({ onClose, onMinimize, isMinimized, zIndex, onFocus }) => {
     switch (mainCmd) {
       case 'help':
         response = `Available Commands:
-  - help           : Show this help message
-  - clear (Ctrl+L) : Clear the terminal screen
-  - ls [dir]       : List files and directories
-  - cd [dir]       : Change working directory
-  - pwd            : Print working directory
-  - cat [file]     : Print file contents
-  - fastfetch      : Display system information
-  - date           : Show current date and time
-  - whoami         : Display current user
-  - uname -a       : Show kernel and system architecture
-  - uptime         : Show system running time
-  - echo [text]    : Output text to terminal
-  - history        : Show command history
-  - exit           : Close terminal tab
+  - help                : Show this help message
+  - clear (Ctrl+L)      : Clear the terminal screen
+  - ls [dir]            : List files and directories
+  - cd [dir]            : Change working directory
+  - pwd                 : Print working directory
+  - cat [file]          : Print file contents
+  - firefox [file/url]  : Open Firefox (e.g. firefox wallpaper.png)
+  - fastfetch           : Display system information
+  - date                : Show current date and time
+  - whoami              : Display current user
+  - uname -a            : Show kernel and system architecture
+  - uptime              : Show system running time
+  - echo [text]         : Output text to terminal
+  - history             : Show command history
+  - exit                : Close terminal tab
 
 Tip: Press [TAB] to auto-complete commands, files, and folders!`;
         break;
@@ -359,7 +498,13 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
 
       case 'ls': {
         const targetDir = args[0] ? (args[0] === '..' ? '~' : args[0].replace(/\/$/, '')) : currentCwd;
-        const dirNode = getDirectoryNode(targetDir === currentCwd ? currentCwd : (currentCwd === '~' ? `~/${targetDir}` : `${currentCwd}/${targetDir}`));
+        const checkPath = targetDir === currentCwd
+          ? currentCwd
+          : (targetDir.startsWith('~') || targetDir.startsWith('/home/ablag'))
+            ? targetDir
+            : (currentCwd === '~' ? `~/${targetDir}` : `${currentCwd}/${targetDir}`);
+
+        const dirNode = getDirectoryNode(checkPath);
         if (dirNode && dirNode.children) {
           const list = Object.entries(dirNode.children).map(([name, node]) => {
             return node.type === 'dir' ? `${name}/` : name;
@@ -376,7 +521,7 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
         break;
 
       case 'cd': {
-        const target = args[0];
+        const target = args.join(' ');
         if (!target || target === '~' || target === '/home/ablag') {
           newCwd = '~';
         } else if (target === '..') {
@@ -387,7 +532,11 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
           }
         } else {
           const cleanTarget = target.replace(/\/$/, '');
-          const checkPath = currentCwd === '~' ? `~/${cleanTarget}` : `${currentCwd}/${cleanTarget}`;
+          const checkPath = cleanTarget.startsWith('~')
+            ? cleanTarget
+            : currentCwd === '~'
+              ? `~/${cleanTarget}`
+              : `${currentCwd}/${cleanTarget}`;
           const node = getDirectoryNode(checkPath);
           if (node && node.type === 'dir') {
             newCwd = checkPath;
@@ -399,13 +548,12 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
       }
 
       case 'cat': {
-        const target = args[0];
+        const target = args.join(' ');
         if (!target) {
           response = 'cat: missing file operand';
         } else {
-          const dirNode = getDirectoryNode(currentCwd);
-          if (dirNode && dirNode.children && dirNode.children[target]) {
-            const fileNode = dirNode.children[target];
+          const fileNode = resolveFile(target, currentCwd);
+          if (fileNode) {
             if (fileNode.type === 'file') {
               response = fileNode.content;
             } else {
@@ -413,6 +561,42 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
             }
           } else {
             response = `cat: ${target}: No such file or directory`;
+          }
+        }
+        break;
+      }
+
+      case 'firefox': {
+        const target = args.join(' ');
+        if (!target) {
+          if (onOpenFirefox) onOpenFirefox();
+          response = 'Launching Firefox browser...';
+        } else {
+          // Check if argument is a local file / picture
+          const fileNode = resolveFile(target, currentCwd);
+          if (fileNode && fileNode.isImage && fileNode.url) {
+            if (onOpenFirefox) onOpenFirefox(fileNode.url);
+            response = `[firefox] Opening image '${target}' in Firefox...`;
+          } else if (fileNode && fileNode.content) {
+            // Text file
+            if (onOpenFirefox) onOpenFirefox(`data:text/plain;charset=utf-8,${encodeURIComponent(fileNode.content)}`);
+            response = `[firefox] Opening '${target}' in Firefox...`;
+          } else if (target.startsWith('http://') || target.startsWith('https://')) {
+            if (onOpenFirefox) onOpenFirefox(target);
+            response = `[firefox] Opening '${target}' in Firefox...`;
+          } else if (target.includes('.')) {
+            // Check if it's wallpaper.png directly
+            if (target.toLowerCase() === 'wallpaper.png') {
+              if (onOpenFirefox) onOpenFirefox(bgArch);
+              response = `[firefox] Opening 'wallpaper.png' in Firefox...`;
+            } else {
+              const url = `https://${target}`;
+              if (onOpenFirefox) onOpenFirefox(url);
+              response = `[firefox] Navigating to '${url}' in Firefox...`;
+            }
+          } else {
+            if (onOpenFirefox) onOpenFirefox(`https://duckduckgo.com/?q=${encodeURIComponent(target)}`);
+            response = `[firefox] Searching '${target}' in Firefox...`;
           }
         }
         break;
@@ -431,7 +615,7 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
         break;
 
       case 'uptime':
-        response = ' 00:10:35 up 6:59,  1 user,  load average: 0.28, 0.35, 0.42';
+        response = ' 00:13:54 up 6:59,  1 user,  load average: 0.28, 0.35, 0.42';
         break;
 
       case 'history':
@@ -508,6 +692,7 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
 
   const handleInputChange = (e) => {
     patchTab(activeTabId, { input: e.target.value });
+    setTimeout(scrollToBottom, 10);
   };
 
   const newTab = () => {
@@ -525,10 +710,12 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
       }
     ]);
     setActiveTabId(id);
+    setTimeout(scrollToBottom, 20);
   };
 
   const switchTab = (id) => {
     setActiveTabId(id);
+    setTimeout(scrollToBottom, 20);
   };
 
   const closeTab = (id) => {
@@ -608,7 +795,7 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
         </div>
 
         {/* Terminal Body */}
-        <div className="terminal-body">
+        <div className="terminal-body" ref={terminalBodyRef}>
           <pre>
             {activeOutput.map((item, index) => (
               <div key={index} className={`terminal-line ${item.type}`}>
@@ -648,8 +835,8 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
               </div>
             </div>
           </pre>
+          <div ref={outputEndRef} style={{ height: '1px' }} />
         </div>
-        <div ref={outputEndRef} />
       </div>
     </Draggable>
   );

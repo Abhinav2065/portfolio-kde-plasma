@@ -122,14 +122,19 @@ const Desktop = () => {
     setFirefoxMinimized(true);
   }
 
-  const handleFirefoxOpen = (e) => {
-    if (e) {
-      e.preventDefault();
-      e.stopPropagation();
+  const [firefoxUrl, setFirefoxUrl] = useState(null);
+
+  const handleFirefoxOpen = (target) => {
+    if (target && target.preventDefault) {
+      target.preventDefault();
+      target.stopPropagation();
     }
     setShowFirefox(true);
     setFirefoxMinimized(false);
     bringToFront('firefox');
+    if (typeof target === 'string') {
+      setFirefoxUrl({ url: target, time: Date.now() });
+    }
   }
 
   const handleFirefoxTaskbarClick = (e) => {
@@ -257,6 +262,7 @@ const Desktop = () => {
                 zIndex={zIndexes.terminal}
                 isFocused={isTopWindow('terminal')}
                 onFocus={() => bringToFront('terminal')}
+                onOpenFirefox={handleFirefoxOpen}
               />
             )}
             {showFirefox && (
@@ -267,6 +273,7 @@ const Desktop = () => {
                 zIndex={zIndexes.firefox}
                 isFocused={isTopWindow('firefox')}
                 onFocus={() => bringToFront('firefox')}
+                externalUrl={firefoxUrl}
               />
             )}
             {notepad && (

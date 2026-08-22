@@ -36,7 +36,7 @@ const StartPage = ({onSearch}) => {
     )
 }
 
-const Firefox = ({ onClose, onMinimize, isMinimized, zIndex, isFocused, onFocus }) => {
+const Firefox = ({ onClose, onMinimize, isMinimized, zIndex, isFocused, onFocus, externalUrl }) => {
     const [tabs, setTabs] = useState([{ id: 1, url: HOME_URL, history: [HOME_URL], index: 0 }]);
     const [activeTabId, setActiveTabId] = useState(1);
     const [urlInput, setUrlInput] = useState(HOME_URL);
@@ -45,13 +45,34 @@ const Firefox = ({ onClose, onMinimize, isMinimized, zIndex, isFocused, onFocus 
 
     const nodeRef = useRef(null);
 
+    useEffect(() => {
+        if (externalUrl && externalUrl.url) {
+            const target = externalUrl.url;
+            setTabs(prev => {
+                const newId = Date.now();
+                return [...prev, { id: newId, url: target, history: [target], index: 0 }];
+            });
+            setActiveTabId(Date.now());
+            setUrlInput(target);
+        }
+    }, [externalUrl]);
+
     const toggleMaximize = () => {
         setIsMaximized(prev => !prev);
     }
 
-    const activeTab = tabs.find(t => t.id === activeTabId);
-    const currentUrl = activeTab.url;
+    const activeTab = tabs.find(t => t.id === activeTabId) || tabs[0];
+    const currentUrl = activeTab ? activeTab.url : HOME_URL;
     const isHome = currentUrl === HOME_URL;
+    const isImg = Boolean(
+        typeof currentUrl === 'string' && (
+            currentUrl.match(/\.(png|jpg|jpeg|gif|svg|webp)($|\?)/i) ||
+            currentUrl.startsWith('data:image') ||
+            currentUrl.startsWith('/assets/') ||
+            currentUrl.startsWith('/src/assets/') ||
+            currentUrl.includes('/assets/')
+        )
+    );
 
     const patchTab = (id, patch) => {
         setTabs(prev => prev.map(t => t.id === id ? { ...t, ...patch } : t));
@@ -210,6 +231,14 @@ const Firefox = ({ onClose, onMinimize, isMinimized, zIndex, isFocused, onFocus 
                 )}
                 {isHome ? (
                     <StartPage onSearch={handleSearch} />
+                ) : isImg ? (
+                    <div className="browser-image-viewer" style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#0e1017', overflow: 'auto', padding: '24px', boxSizing: 'border-box' }}>
+                        <img
+                            src={currentUrl}
+                            alt="Preview"
+                            style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain', borderRadius: '4px', boxShadow: '0 8px 30px rgba(0,0,0,0.6)' }}
+                        />
+                    </div>
                 ) : (
                     <iframe
                         src={currentUrl}
