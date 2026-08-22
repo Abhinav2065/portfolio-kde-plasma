@@ -243,11 +243,65 @@
     display: flex;
 }
 
-.command .output-content {
-    color: #d9d9de;
-}
-
 .output .output-content {
     color: #a8a8b3;
     white-space: pre-wrap;
+}
+
+/* Fastfetch Side-by-Side Avatar & Specs */
+.fastfetch-container {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    padding: 8px 0;
+    font-family: inherit;
+}
+
+.fastfetch-image-box {
+    flex-shrink: 0;
+}
+
+.fastfetch-avatar {
+    width: 175px;
+    height: 175px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.5);
+    display: block;
+}
+
+.fastfetch-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+
+.fastfetch-quote {
+    color: #e5534b;
+    font-size: 12px;
+    margin-bottom: 4px;
+    line-height: 1.3;
+}
+
+.fastfetch-row {
+    display: flex;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.fastfetch-key {
+    color: #3daee9;
+    font-weight: 600;
+    min-width: 85px;
+}
+
+.fastfetch-val {
+    color: #d9d9de;
+}
+
+.fastfetch-sep {
+    height: 4px;
 }

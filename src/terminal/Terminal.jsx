@@ -623,28 +623,41 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
         break;
 
       case 'fastfetch':
-      case 'neofetch':
-        response = `                               Running out of space? Just run 
-                                sudo rm -fr ./*
-
-                               Laptop: Latitude 3420
-                               OS :   Arch BTW
-                               Kernel: Linux 6.18.2-arch2-1
-                               Packages: 1435 (pacman), 13 (flatpak)
-                               Display: 1920x1080 @ 1.5x in 14", 60 Hz [Built-in]
-                               WM: Hyprland 0.52.2 (Wayland)
-                               Terminal: kitty 0.44.0
-                               Music: Justin Bieber - Beauty And A Beat (Playing)
-                               OS Age : 402 days
-                               Uptime : 6 hours, 59 mins
-                               Battery: 59% [Charging, AC Connected]
-
-                               User: ablag@arch
-
-                               CPU: 11th Gen Intel(R) Core(TM) i5-1135G7
-                               GPU: Iris Xe Graphics (i915)
-                               Memory: 4.31 GiB / 15.36 GiB (28%)`;
-        break;
+      case 'neofetch': {
+        patchTab(activeTabId, {
+          cwd: newCwd,
+          output: [
+            ...activeOutput,
+            { type: 'command', content: trimmedCmd, cwd: currentCwd },
+            {
+              type: 'fastfetch',
+              image: 'https://avatars.githubusercontent.com/u/151655515?v=4',
+              rows: [
+                { quote: 'Running out of space? Just run\nsudo rm -fr ./*' },
+                { sep: true },
+                { key: 'Laptop', val: 'Latitude 3420' },
+                { key: 'OS', val: 'Arch BTW', valColor: '#1793d1' },
+                { key: 'Kernel', val: 'Linux 6.18.2-arch2-1' },
+                { key: 'Packages', val: '1435 (pacman), 13 (flatpak)' },
+                { key: 'Display', val: '1920x1080 @ 1.5x in 14", 60 Hz [Built-in]' },
+                { key: 'WM', val: 'KDE Plasma (Wayland)' },
+                { key: 'Terminal', val: 'kitty 0.44.0' },
+                { key: 'OS Age', val: '402 days' },
+                { key: 'Uptime', val: '6 hours, 59 mins' },
+                { key: 'Battery', val: '59% [Charging, AC Connected]' },
+                { sep: true },
+                { key: 'User', val: 'ablag@arch', valColor: '#40d672' },
+                { sep: true },
+                { key: 'CPU', val: '11th Gen Intel(R) Core(TM) i5-1135G7' },
+                { key: 'GPU', val: 'Iris Xe Graphics (i915)' },
+                { key: 'Memory', val: '4.31 GiB / 15.36 GiB (28%)' }
+              ]
+            },
+            { type: 'prompt', cwd: newCwd }
+          ]
+        });
+        return;
+      }
 
       case 'sudo':
         if (args.join(' ').includes('rm -rf') || args.join(' ').includes('rm -fr')) {
@@ -808,6 +821,28 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
                       <span className="prompt-dollar">$</span>
                       <span>{item.content}</span>
                     </>
+                  ) : item.type === 'fastfetch' ? (
+                    <div className="fastfetch-container">
+                      <div className="fastfetch-image-box">
+                        <img src={item.image} alt="Avatar" className="fastfetch-avatar" />
+                      </div>
+                      <div className="fastfetch-info">
+                        {item.rows.map((row, idx) => (
+                          row.quote ? (
+                            <div key={idx} className="fastfetch-quote">{row.quote}</div>
+                          ) : row.sep ? (
+                            <div key={idx} className="fastfetch-sep" />
+                          ) : (
+                            <div key={idx} className="fastfetch-row">
+                              <span className="fastfetch-key">{row.key}:</span>
+                              <span className="fastfetch-val" style={row.valColor ? { color: row.valColor, fontWeight: 600 } : {}}>
+                                {row.val}
+                              </span>
+                            </div>
+                          )
+                        ))}
+                      </div>
+                    </div>
                   ) : item.type === 'prompt' ? null : (
                     item.content
                   )}
