@@ -639,25 +639,28 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
             {
               type: 'fastfetch',
               image: FASTFETCH_AVATAR_URL,
+              user: 'ablag',
+              host: 'arch',
               rows: [
                 { quote: 'Running out of space? Just run\nsudo rm -fr ./*' },
                 { sep: true },
-                { key: 'Laptop', val: 'Latitude 3420' },
-                { key: 'OS', val: 'Arch BTW', valColor: '#1793d1' },
-                { key: 'Kernel', val: 'Linux 6.18.2-arch2-1' },
-                { key: 'Packages', val: '1435 (pacman), 13 (flatpak)' },
-                { key: 'Display', val: '1920x1080 @ 1.5x in 14", 60 Hz [Built-in]' },
-                { key: 'WM', val: 'KDE Plasma (Wayland)' },
-                { key: 'Terminal', val: 'kitty 0.44.0' },
-                { key: 'OS Age', val: '402 days' },
-                { key: 'Uptime', val: '6 hours, 59 mins' },
-                { key: 'Battery', val: '59% [Charging, AC Connected]' },
+                { key: 'Laptop', keyColor: '#61afef', val: 'Latitude 3420' },
+                { key: 'OS', keyColor: '#1793d1', val: 'Arch BTW' },
+                { key: 'Kernel', keyColor: '#c678dd', val: 'Linux 6.18.2-arch2-1' },
+                { key: 'Packages', keyColor: '#56b6c2', val: '1435 (pacman), 13 (flatpak)' },
+                { key: 'Display', keyColor: '#3daee9', val: '1920x1080 @ 1.5x in 14", 60 Hz [Built-in]' },
+                { key: 'WM', keyColor: '#98c379', val: 'KDE Plasma (Wayland)' },
+                { key: 'Terminal', keyColor: '#e5c07b', val: 'kitty 0.44.0' },
+                { key: 'OS Age', keyColor: '#61afef', val: '402 days' },
+                { key: 'Uptime', keyColor: '#e5c07b', val: '6 hours, 59 mins' },
+                { key: 'Battery', keyColor: '#2ecc71', val: '59% [Charging, AC Connected]' },
                 { sep: true },
-                { key: 'User', val: 'ablag@arch', valColor: '#40d672' },
+                { key: 'User', keyColor: '#40d672', val: 'ablag@arch' },
                 { sep: true },
-                { key: 'CPU', val: '11th Gen Intel(R) Core(TM) i5-1135G7' },
-                { key: 'GPU', val: 'Iris Xe Graphics (i915)' },
-                { key: 'Memory', val: '4.31 GiB / 15.36 GiB (28%)' }
+                { key: 'CPU', keyColor: '#e06c75', val: '11th Gen Intel(R) Core(TM) i5-1135G7' },
+                { key: 'GPU', keyColor: '#c678dd', val: 'Iris Xe Graphics (i915)' },
+                { key: 'Memory', keyColor: '#98c379', val: '4.31 GiB / 15.36 GiB (28%)' },
+                { palette: true }
               ]
             },
             { type: 'prompt', cwd: newCwd }
@@ -846,9 +849,24 @@ Tip: Press [TAB] to auto-complete commands, files, and folders!`;
                             <div key={idx} className="fastfetch-quote">{row.quote}</div>
                           ) : row.sep ? (
                             <div key={idx} className="fastfetch-sep" />
+                          ) : row.palette ? (
+                            <div key={idx} className="fastfetch-palette">
+                              <div className="fastfetch-palette-row">
+                                {['#282c34', '#e06c75', '#98c379', '#e5c07b', '#61afef', '#c678dd', '#56b6c2', '#abb2bf'].map((c, ci) => (
+                                  <span key={ci} className="fastfetch-color-dot" style={{ backgroundColor: c }} />
+                                ))}
+                              </div>
+                              <div className="fastfetch-palette-row">
+                                {['#5c6370', '#be5046', '#a0db8e', '#ebcb8b', '#81a1c1', '#b48ead', '#88c0d0', '#e5e9f0'].map((c, ci) => (
+                                  <span key={ci} className="fastfetch-color-dot" style={{ backgroundColor: c }} />
+                                ))}
+                              </div>
+                            </div>
                           ) : (
                             <div key={idx} className="fastfetch-row">
-                              <span className="fastfetch-key">{row.key}:</span>
+                              <span className="fastfetch-key" style={row.keyColor ? { color: row.keyColor } : {}}>
+                                {row.key}:
+                              </span>
                               <span className="fastfetch-val" style={row.valColor ? { color: row.valColor, fontWeight: 600 } : {}}>
                                 {row.val}
                               </span>

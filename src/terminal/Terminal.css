@@ -280,10 +280,35 @@
 }
 
 .fastfetch-quote {
-    color: #e5534b;
-    font-size: 12px;
-    margin-bottom: 4px;
+    color: #e06c75;
+    font-size: 11.5px;
+    margin-bottom: 2px;
     line-height: 1.3;
+}
+
+.fastfetch-title {
+    font-size: 13.5px;
+    font-weight: 700;
+    margin: 2px 0;
+}
+
+.fastfetch-user {
+    color: #40d672;
+}
+
+.fastfetch-at {
+    color: #eff0f1;
+}
+
+.fastfetch-host {
+    color: #1793d1;
+}
+
+.fastfetch-underline {
+    color: #5c6370;
+    font-size: 11px;
+    margin-bottom: 4px;
+    letter-spacing: -0.5px;
 }
 
 .fastfetch-row {
@@ -293,15 +318,33 @@
 }
 
 .fastfetch-key {
-    color: #3daee9;
     font-weight: 600;
     min-width: 85px;
 }
 
 .fastfetch-val {
-    color: #d9d9de;
+    color: #eff0f1;
 }
 
 .fastfetch-sep {
     height: 4px;
+}
+
+.fastfetch-palette {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    margin-top: 6px;
+}
+
+.fastfetch-palette-row {
+    display: flex;
+    gap: 5px;
+}
+
+.fastfetch-color-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    display: inline-block;
 }
