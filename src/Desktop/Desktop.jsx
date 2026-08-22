@@ -17,10 +17,50 @@ import Notepad from './Notepad'
 const Desktop = () => {
 
   const [showterminal, setShowTerminal] = useState(false);
+  const [terminalMinimized, setTerminalMinimized] = useState(false);
+
   const [showStartMenu, setShowStartMenu] = useState(false);
+
   const [showFirefox, setShowFirefox] = useState(false);
+  const [firefoxMinimized, setFirefoxMinimized] = useState(false);
+
   const [showSettings, setShowSettings] = useState(false);
+  const [settingsMinimized, setSettingsMinimized] = useState(false);
+
   const [notepad, setNotepad] = useState(null);
+  const [notepadMinimized, setNotepadMinimized] = useState(false);
+
+  const [zIndexes, setZIndexes] = useState({
+    terminal: 10,
+    firefox: 11,
+    settings: 12,
+    notepad: 13,
+  });
+  const [topZIndex, setTopZIndex] = useState(20);
+
+  const bringToFront = (appName) => {
+    setTopZIndex(prev => {
+      const nextZ = prev + 1;
+      setZIndexes(current => ({
+        ...current,
+        [appName]: nextZ
+      }));
+      return nextZ;
+    });
+  };
+
+  const isTopWindow = (appName) => {
+    const appZ = zIndexes[appName] || 0;
+    const openApps = [];
+    if (showterminal && !terminalMinimized) openApps.push('terminal');
+    if (showFirefox && !firefoxMinimized) openApps.push('firefox');
+    if (showSettings && !settingsMinimized) openApps.push('settings');
+    if (notepad && !notepadMinimized) openApps.push('notepad');
+
+    if (!openApps.includes(appName)) return false;
+    return openApps.every(name => name === appName || appZ >= (zIndexes[name] || 0));
+  };
+
   const [now, setNow] = useState(new Date());
 
   useEffect(() => {
@@ -37,6 +77,11 @@ const Desktop = () => {
 
   const handleTerminalClose = () => {
     setShowTerminal(false);
+    setTerminalMinimized(false);
+  }
+
+  const handleTerminalMinimize = () => {
+    setTerminalMinimized(true);
   }
 
   const handleTerminalOpen = (e) => {
@@ -45,11 +90,36 @@ const Desktop = () => {
       e.stopPropagation();
     }
     setShowTerminal(true);
+    setTerminalMinimized(false);
+    bringToFront('terminal');
   }
 
+  const handleTerminalTaskbarClick = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (!showterminal) {
+      setShowTerminal(true);
+      setTerminalMinimized(false);
+      bringToFront('terminal');
+    } else if (terminalMinimized) {
+      setTerminalMinimized(false);
+      bringToFront('terminal');
+    } else if (isTopWindow('terminal')) {
+      setTerminalMinimized(true);
+    } else {
+      bringToFront('terminal');
+    }
+  }
 
   const handleFirefoxClose = () => {
     setShowFirefox(false);
+    setFirefoxMinimized(false);
+  }
+
+  const handleFirefoxMinimize = () => {
+    setFirefoxMinimized(true);
   }
 
   const handleFirefoxOpen = (e) => {
@@ -58,15 +128,33 @@ const Desktop = () => {
       e.stopPropagation();
     }
     setShowFirefox(true);
+    setFirefoxMinimized(false);
+    bringToFront('firefox');
   }
 
-
+  const handleFirefoxTaskbarClick = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (!showFirefox) {
+      setShowFirefox(true);
+      setFirefoxMinimized(false);
+      bringToFront('firefox');
+    } else if (firefoxMinimized) {
+      setFirefoxMinimized(false);
+      bringToFront('firefox');
+    } else if (isTopWindow('firefox')) {
+      setFirefoxMinimized(true);
+    } else {
+      bringToFront('firefox');
+    }
+  }
 
   const handleStartButtonClick = (e) => {
     e.stopPropagation();
     setShowStartMenu(prev => !prev);
   }
-
 
   const handleDesktopClick = () => {
     if (showStartMenu) {
@@ -80,6 +168,11 @@ const Desktop = () => {
 
   const handleSettingsClose = () => {
     setShowSettings(false);
+    setSettingsMinimized(false);
+  }
+
+  const handleSettingsMinimize = () => {
+    setSettingsMinimized(true);
   }
 
   const handleSettingsOpen = (e) => {
@@ -88,6 +181,27 @@ const Desktop = () => {
       e.stopPropagation();
     }
     setShowSettings(true);
+    setSettingsMinimized(false);
+    bringToFront('settings');
+  }
+
+  const handleSettingsTaskbarClick = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (!showSettings) {
+      setShowSettings(true);
+      setSettingsMinimized(false);
+      bringToFront('settings');
+    } else if (settingsMinimized) {
+      setSettingsMinimized(false);
+      bringToFront('settings');
+    } else if (isTopWindow('settings')) {
+      setSettingsMinimized(true);
+    } else {
+      bringToFront('settings');
+    }
   }
 
   const handleNotepadOpen = (e) => {
@@ -96,26 +210,75 @@ const Desktop = () => {
       e.stopPropagation();
     }
     setNotepad({ name: 'Notepad', content: 'Welcome to my portfolio desktop! Double-click the desktop icons to read about me, my projects, and my links.' });
+    setNotepadMinimized(false);
+    bringToFront('notepad');
   }
 
   const handleIconNotepadOpen = (icon) => {
     setNotepad({ name: icon.name, content: icon.content });
+    setNotepadMinimized(false);
+    bringToFront('notepad');
   }
 
   const handleNotepadClose = () => {
     setNotepad(null);
+    setNotepadMinimized(false);
+  }
+
+  const handleNotepadMinimize = () => {
+    setNotepadMinimized(true);
+  }
+
+  const handleNotepadTaskbarClick = (e) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    if (!notepad) {
+      handleNotepadOpen(e);
+    } else if (notepadMinimized) {
+      setNotepadMinimized(false);
+      bringToFront('notepad');
+    } else if (isTopWindow('notepad')) {
+      setNotepadMinimized(true);
+    } else {
+      bringToFront('notepad');
+    }
   }
 
   return (
     <div>
        <div className="desktop" onClick={handleDesktopClick}>
-            {showterminal && <Terminal onClose={handleTerminalClose}/>}
-            {showFirefox && <Firefox onClose={handleFirefoxClose} />}
+            {showterminal && (
+              <Terminal
+                onClose={handleTerminalClose}
+                onMinimize={handleTerminalMinimize}
+                isMinimized={terminalMinimized}
+                zIndex={zIndexes.terminal}
+                isFocused={isTopWindow('terminal')}
+                onFocus={() => bringToFront('terminal')}
+              />
+            )}
+            {showFirefox && (
+              <Firefox
+                onClose={handleFirefoxClose}
+                onMinimize={handleFirefoxMinimize}
+                isMinimized={firefoxMinimized}
+                zIndex={zIndexes.firefox}
+                isFocused={isTopWindow('firefox')}
+                onFocus={() => bringToFront('firefox')}
+              />
+            )}
             {notepad && (
               <Notepad
                 title={notepad.name}
                 content={notepad.content}
                 onClose={handleNotepadClose}
+                onMinimize={handleNotepadMinimize}
+                isMinimized={notepadMinimized}
+                zIndex={zIndexes.notepad}
+                isFocused={isTopWindow('notepad')}
+                onFocus={() => bringToFront('notepad')}
               />
             )}
            <Icons onOpenNotepad={handleIconNotepadOpen}></Icons>
@@ -123,30 +286,37 @@ const Desktop = () => {
           {showStartMenu && (
             <StartMenu
               onClick={handleStartMenuClick}
-              onOpenFirefox = {handleFirefoxOpen}
+              onOpenFirefox={handleFirefoxOpen}
               onOpenTerminal={handleTerminalOpen}
               onOpenNotepad={handleNotepadOpen}
             />
           )}
 
           {showSettings && (
-            <Settings onClose={handleSettingsClose}/>
+            <Settings
+              onClose={handleSettingsClose}
+              onMinimize={handleSettingsMinimize}
+              isMinimized={settingsMinimized}
+              zIndex={zIndexes.settings}
+              isFocused={isTopWindow('settings')}
+              onFocus={() => bringToFront('settings')}
+            />
           )}
 
             <div className="taskbar">
                     <button type="button" className={`taskbar-btn start-btn ${showStartMenu ? 'active' : ''}`} onClick={handleStartButtonClick} title="Start Menu">
                         <img src={arch} alt="Start Menu" className='tb-arch' />
                     </button>
-                    <button type="button" className={`taskbar-btn ${showFirefox ? 'active' : ''}`} onClick={handleFirefoxOpen} title="Firefox">
+                    <button type="button" className={`taskbar-btn ${showFirefox ? 'active' : ''} ${showFirefox && !firefoxMinimized && isTopWindow('firefox') ? 'focused' : ''}`} onClick={handleFirefoxTaskbarClick} title="Firefox">
                         <img src={firefox} alt="Firefox" className='tb-firefox' />
                     </button>
-                    <button type="button" className={`taskbar-btn ${showterminal ? 'active' : ''}`} onClick={handleTerminalOpen} title="Terminal">
+                    <button type="button" className={`taskbar-btn ${showterminal ? 'active' : ''} ${showterminal && !terminalMinimized && isTopWindow('terminal') ? 'focused' : ''}`} onClick={handleTerminalTaskbarClick} title="Terminal">
                         <img src={terminal} alt="Terminal" className='tb-terminal' />
                     </button>
-                    <button type="button" className={`taskbar-btn ${showSettings ? 'active' : ''}`} onClick={handleSettingsOpen} title="Settings">
+                    <button type="button" className={`taskbar-btn ${showSettings ? 'active' : ''} ${showSettings && !settingsMinimized && isTopWindow('settings') ? 'focused' : ''}`} onClick={handleSettingsTaskbarClick} title="Settings">
                         <img src={settings} alt="Settings" className='tb-settings' />
                     </button>
-                    <button type="button" className={`taskbar-btn ${notepad ? 'active' : ''}`} onClick={handleNotepadOpen} title="Notepad">
+                    <button type="button" className={`taskbar-btn ${notepad ? 'active' : ''} ${notepad && !notepadMinimized && isTopWindow('notepad') ? 'focused' : ''}`} onClick={handleNotepadTaskbarClick} title="Notepad">
                         <img src={notepadImg} alt="Notepad" className='tb-notepad' />
                     </button>
 
